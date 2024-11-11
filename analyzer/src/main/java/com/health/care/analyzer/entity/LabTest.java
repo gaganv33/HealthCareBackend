@@ -1,6 +1,5 @@
-package com.health.care.analyzer.entity.users;
+package com.health.care.analyzer.entity;
 
-import com.health.care.analyzer.entity.PhlebotomistTest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,46 +7,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Data
-@Table(name = "phlebotomist")
-public class Phlebotomist {
+@Table(name = "lab_test")
+public class LabTest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "dob", nullable = false)
-    private Date dob;
-
-    @Column(name = "registered_date", nullable = false)
-    private Date registeredDate;
-
-    @Column(name = "phone_no", nullable = false)
-    private String phoneNo;
-
-    @Column(name = "blood_group", nullable = false)
-    private String bloodGroup;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @ManyToMany(cascade = {
             CascadeType.DETACH,
-            CascadeType.PERSIST,
             CascadeType.MERGE,
+            CascadeType.PERSIST,
             CascadeType.REFRESH
     }, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "phlebotomist_test_phlebotomist",
-            joinColumns = @JoinColumn(name = "phlebotomist_id"),
+            name = "phlebotomist_test_lab_test",
+            joinColumns = @JoinColumn(name = "lab_test_id"),
             inverseJoinColumns = @JoinColumn(name = "phlebotomist_test_id")
     )
     private List<PhlebotomistTest> phlebotomistTestList;

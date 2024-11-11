@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class Medicine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -53,5 +51,11 @@ public class Medicine {
             prescriptionList = new ArrayList<>();
         }
         prescriptionList.add(prescription);
+    }
+
+    public void removePrescription(Prescription prescription) {
+        if(prescriptionList != null) {
+            prescriptionList.remove(prescription);
+        }
     }
 }

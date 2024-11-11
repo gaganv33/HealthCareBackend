@@ -20,7 +20,7 @@ public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @OneToOne(cascade = {
             CascadeType.DETACH,
@@ -38,7 +38,7 @@ public class Prescription {
             CascadeType.REFRESH
     }, fetch = FetchType.EAGER)
     @JoinColumn(name = "receptionist_id")
-    private Receptionist receptionistList;
+    private Receptionist receptionist;
 
     @ManyToMany(cascade = {
             CascadeType.DETACH,
@@ -58,5 +58,11 @@ public class Prescription {
             medicineList = new ArrayList<>();
         }
         medicineList.add(medicine);
+    }
+
+    public void removeMedicine(Medicine medicine) {
+        if(medicineList != null) {
+            medicineList.remove(medicine);
+        }
     }
 }

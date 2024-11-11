@@ -21,7 +21,7 @@ public class Receptionist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "dob", nullable = false)
     private Date dob;
@@ -39,7 +39,7 @@ public class Receptionist {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "receptionistList", cascade = {
+    @OneToMany(mappedBy = "receptionist", cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH,
@@ -52,5 +52,11 @@ public class Receptionist {
             prescriptionList = new ArrayList<>();
         }
         prescriptionList.add(prescription);
+    }
+
+    public void removePrescription(Prescription prescription) {
+        if(prescriptionList != null) {
+            prescriptionList.remove(prescription);
+        }
     }
 }

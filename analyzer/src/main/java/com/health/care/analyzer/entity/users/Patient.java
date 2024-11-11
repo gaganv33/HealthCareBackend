@@ -21,7 +21,7 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "dob", nullable = false)
     private Date dob;
@@ -47,5 +47,11 @@ public class Patient {
             appointmentList = new ArrayList<>();
         }
         appointmentList.add(appointment);
+    }
+
+    public void removeAppointment(Appointment appointment) {
+        if(appointmentList != null) {
+            appointmentList.remove(appointment);
+        }
     }
 }

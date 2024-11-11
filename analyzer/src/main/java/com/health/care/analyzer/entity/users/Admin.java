@@ -18,7 +18,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "dob", nullable = false)
     private Date dob;
@@ -31,6 +31,9 @@ public class Admin {
 
     @Column(name = "blood_group", nullable = false)
     private String bloodGroup;
+
+    @Column(name = "dashboard_password", nullable = false)
+    private String dashboardPassword;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
