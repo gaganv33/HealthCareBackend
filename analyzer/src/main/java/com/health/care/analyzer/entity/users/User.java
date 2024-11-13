@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.users;
 
+import com.health.care.analyzer.dto.user.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,4 +47,13 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Doctor doctor;
+
+    public User(UserRequestDTO userRequestDTO) {
+        this.username = userRequestDTO.getUsername();
+        this.firstName = userRequestDTO.getFirstName();
+        this.lastName = userRequestDTO.getLastName();
+        this.password = userRequestDTO.getPassword();
+        this.roles = userRequestDTO.getRoles();
+        this.isEnabled = userRequestDTO.getIsEnabled();
+    }
 }
