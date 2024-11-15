@@ -68,4 +68,10 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
         refreshTokenDAO.deleteTokenByUser(user.get());
     }
+
+    @Override
+    @Transactional
+    public void deleteToken(String token) {
+        refreshTokenDAO.deleteByToken(token);
+    }
 }

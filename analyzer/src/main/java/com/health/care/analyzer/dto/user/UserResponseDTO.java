@@ -22,7 +22,7 @@ public class UserResponseDTO {
         this.username = user.getUsername();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.roles = user.getRoles();
+        this.roles = user.getRole();
         this.isEnabled = user.getIsEnabled();
     }
 }

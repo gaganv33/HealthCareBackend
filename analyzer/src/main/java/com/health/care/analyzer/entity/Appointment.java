@@ -10,12 +10,20 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
+/*
+@UniqueConstraint annotation:
+A unique constraint is the rule that the values of a key are valid only if they are unique.
+A key that is constrained to have unique values is called a unique key .
+A unique constraint is enforced by using a unique index.
+ */
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "appointment")
+@Table(name = "appointment", uniqueConstraints = @UniqueConstraint(columnNames = {"id", "slot", "date", "doctor_id", "patient_id"}))
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

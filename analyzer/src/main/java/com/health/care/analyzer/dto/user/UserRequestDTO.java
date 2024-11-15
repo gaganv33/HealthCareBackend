@@ -26,9 +26,6 @@ public class UserRequestDTO {
     private String password;
 
     @NotBlank(message = "roles should not be blank")
-    @Pattern(regexp = "^(ROLE_[^,]+)(,ROLE_[^,]+)*$", message = "roles does not match the pattern 'ROLE_'")
-    private String roles;
-
-    @NonNull
-    private Boolean isEnabled;
+    @Pattern(regexp = "^ROLE_[A-Za-z0-9_]*$", message = "roles does not match the pattern 'ROLE_'")
+    private String role;
 }

@@ -27,8 +27,8 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "roles", nullable = false)
-    private String roles;
+    @Column(name = "role", nullable = false)
+    private String role;
 
     @Column(name = "is_enabled", nullable = false)
     private Boolean isEnabled;
@@ -53,7 +53,6 @@ public class User {
         this.firstName = userRequestDTO.getFirstName();
         this.lastName = userRequestDTO.getLastName();
         this.password = userRequestDTO.getPassword();
-        this.roles = userRequestDTO.getRoles();
-        this.isEnabled = userRequestDTO.getIsEnabled();
+        this.role = userRequestDTO.getRole();
     }
 }
