@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.users;
 
+import com.health.care.analyzer.dto.doctor.DoctorRequestDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Designation;
 import jakarta.persistence.*;
@@ -65,5 +66,12 @@ public class Doctor {
         if(appointmentList != null) {
             appointmentList.remove(appointment);
         }
+    }
+
+    public Doctor(DoctorRequestDTO doctorRequestDTO) {
+        this.dob = doctorRequestDTO.getDob();
+        this.registeredDate = doctorRequestDTO.getRegisteredDate();
+        this.phoneNo = doctorRequestDTO.getPhoneNo();
+        this.bloodGroup = doctorRequestDTO.getBloodGroup();
     }
 }

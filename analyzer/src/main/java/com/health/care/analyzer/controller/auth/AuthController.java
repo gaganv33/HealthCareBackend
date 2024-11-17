@@ -23,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -84,11 +83,9 @@ public class AuthController {
     @GetMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest httpServletRequest) {
         String authorization = httpServletRequest.getHeader("Authorization");
-        if(!authorization.startsWith("Bearer ")) {
-            return new ResponseEntity<>("Logout failed", HttpStatus.BAD_REQUEST);
-        }
         String token = authorization.substring(7);
-        refreshTokenService.deleteToken(token);
+        String username = jwtService.extractUsername(token);
+        refreshTokenService.deleteTokenByUser(username);
         return new ResponseEntity<>("Logout successful", HttpStatus.OK);
     }
 

@@ -5,6 +5,7 @@ import com.health.care.analyzer.entity.users.User;
 import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,14 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userDAO.save(user);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        Optional<User> user = userDAO.findByUsername(username);
+        if(user.isEmpty()) {
+            throw new UsernameNotFoundException("Username " + username + " not found");
+        }
+        return user.get();
     }
 }
