@@ -1,6 +1,8 @@
-package com.health.care.analyzer.entity.users;
+package com.health.care.analyzer.entity.userEntity;
 
+import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.entity.Appointment;
+import com.health.care.analyzer.entity.Designation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,8 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-@Table(name = "patient")
-public class Patient {
+@Table(name = "doctor")
+public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -39,8 +41,19 @@ public class Patient {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private List<Designation> designationList;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointmentList;
+
+    public void addDesignation(Designation designation) {
+        if(designationList == null) {
+            designationList = new ArrayList<>();
+        }
+        designationList.add(designation);
+    }
 
     public void addAppointment(Appointment appointment) {
         if(appointmentList == null) {
@@ -53,5 +66,12 @@ public class Patient {
         if(appointmentList != null) {
             appointmentList.remove(appointment);
         }
+    }
+
+    public Doctor(ProfileRequestDTO profileRequestDTO) {
+        this.dob = profileRequestDTO.getDob();
+        this.registeredDate = profileRequestDTO.getRegisteredDate();
+        this.phoneNo = profileRequestDTO.getPhoneNo();
+        this.bloodGroup = profileRequestDTO.getBloodGroup();
     }
 }

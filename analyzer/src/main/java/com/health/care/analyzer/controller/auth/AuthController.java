@@ -6,7 +6,7 @@ import com.health.care.analyzer.dto.auth.RefreshTokenRequestDTO;
 import com.health.care.analyzer.dto.user.UserRequestDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.RefreshToken;
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.InvalidRefreshTokenException;
 import com.health.care.analyzer.exception.InvalidRoleException;
 import com.health.care.analyzer.exception.UnauthorizedException;

@@ -1,7 +1,7 @@
 package com.health.care.analyzer.dao.auth.refreshToken;
 
 import com.health.care.analyzer.entity.RefreshToken;
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.User;
 
 import java.util.Optional;
 

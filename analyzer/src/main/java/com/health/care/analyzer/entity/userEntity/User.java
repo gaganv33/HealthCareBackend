@@ -1,4 +1,4 @@
-package com.health.care.analyzer.entity.users;
+package com.health.care.analyzer.entity.userEntity;
 
 import com.health.care.analyzer.dto.user.UserRequestDTO;
 import jakarta.persistence.*;

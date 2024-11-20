@@ -1,6 +1,6 @@
-package com.health.care.analyzer.entity.users;
+package com.health.care.analyzer.entity.userEntity;
 
-import com.health.care.analyzer.entity.Prescription;
+import com.health.care.analyzer.entity.Appointment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "receptionist")
-public class Receptionist {
+@Data
+@Table(name = "patient")
+public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -39,24 +39,19 @@ public class Receptionist {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "receptionist", cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST
-    }, fetch = FetchType.LAZY)
-    private List<Prescription> prescriptionList;
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Appointment> appointmentList;
 
-    public void addPrescription(Prescription prescription) {
-        if(prescriptionList == null) {
-            prescriptionList = new ArrayList<>();
+    public void addAppointment(Appointment appointment) {
+        if(appointmentList == null) {
+            appointmentList = new ArrayList<>();
         }
-        prescriptionList.add(prescription);
+        appointmentList.add(appointment);
     }
 
-    public void removePrescription(Prescription prescription) {
-        if(prescriptionList != null) {
-            prescriptionList.remove(prescription);
+    public void removeAppointment(Appointment appointment) {
+        if(appointmentList != null) {
+            appointmentList.remove(appointment);
         }
     }
 }

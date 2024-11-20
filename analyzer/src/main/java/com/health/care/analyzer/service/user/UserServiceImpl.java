@@ -1,7 +1,7 @@
 package com.health.care.analyzer.service.user;
 
 import com.health.care.analyzer.dao.user.UserDAO;
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

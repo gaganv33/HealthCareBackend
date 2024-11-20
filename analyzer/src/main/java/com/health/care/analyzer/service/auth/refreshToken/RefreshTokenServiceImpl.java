@@ -3,7 +3,7 @@ package com.health.care.analyzer.service.auth.refreshToken;
 import com.health.care.analyzer.dao.auth.refreshToken.RefreshTokenDAO;
 import com.health.care.analyzer.dao.user.UserDAO;
 import com.health.care.analyzer.entity.RefreshToken;
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.InvalidRefreshTokenException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.health.care.analyzer.entity;
+package com.health.care.analyzer.entity.testEntity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

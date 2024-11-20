@@ -1,5 +1,6 @@
-package com.health.care.analyzer.entity.users;
+package com.health.care.analyzer.entity.userEntity;
 
+import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,10 +33,18 @@ public class Admin {
     @Column(name = "blood_group", nullable = false)
     private String bloodGroup;
 
-    @Column(name = "dashboard_password", nullable = false)
+    // need to change it to nullable = false
+    @Column(name = "dashboard_password", nullable = true)
     private String dashboardPassword;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Admin(ProfileRequestDTO profileRequestDTO) {
+        this.dob = profileRequestDTO.getDob();
+        this.registeredDate = profileRequestDTO.getRegisteredDate();
+        this.phoneNo = profileRequestDTO.getPhoneNo();
+        this.bloodGroup = profileRequestDTO.getBloodGroup();
+    }
 }

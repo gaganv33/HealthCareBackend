@@ -1,13 +1,12 @@
 package com.health.care.analyzer.dao.doctor;
 
-import com.health.care.analyzer.entity.users.Doctor;
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.Doctor;
+import com.health.care.analyzer.entity.userEntity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.print.Doc;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +38,7 @@ public class DoctorDAOImpl implements DoctorDAO {
     }
 
     @Override
-    public Doctor update(Doctor doctor) {
+    public void update(Doctor doctor) {
         entityManager.createQuery(
                 "update Doctor d set d.dob = :dob, d.registeredDate = :registeredDate, " +
                         "d.phoneNo = :phoneNo, d.bloodGroup = :bloodGroup where d.user = :user")
@@ -49,6 +48,5 @@ public class DoctorDAOImpl implements DoctorDAO {
                         .setParameter("bloodGroup", doctor.getBloodGroup())
                         .setParameter("user", doctor.getUser())
                         .executeUpdate();
-        return doctor;
     }
 }

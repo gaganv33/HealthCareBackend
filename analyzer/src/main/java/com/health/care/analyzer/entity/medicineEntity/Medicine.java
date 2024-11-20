@@ -1,4 +1,4 @@
-package com.health.care.analyzer.entity;
+package com.health.care.analyzer.entity.medicineEntity;
 
 import com.health.care.analyzer.entity.Prescription;
 import jakarta.persistence.*;
@@ -46,6 +46,19 @@ public class Medicine {
     )
     private List<Prescription> prescriptionList;
 
+    @ManyToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+    }, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "medicine_vendor_join",
+            joinColumns = @JoinColumn(name = "medicine_id"),
+            inverseJoinColumns = @JoinColumn(name = "medicine_vendor_id")
+    )
+    private List<MedicineVendor> vendorList;
+
     public void addPrescription(Prescription prescription) {
         if(prescriptionList == null) {
             prescriptionList = new ArrayList<>();
@@ -56,6 +69,19 @@ public class Medicine {
     public void removePrescription(Prescription prescription) {
         if(prescriptionList != null) {
             prescriptionList.remove(prescription);
+        }
+    }
+
+    public void addMedicineVendor(MedicineVendor vendor) {
+        if(vendorList == null) {
+            vendorList = new ArrayList<>();
+        }
+        vendorList.add(vendor);
+    }
+
+    public void removeMedicineVendor(MedicineVendor vendor) {
+        if(vendorList != null) {
+            vendorList.remove(vendor);
         }
     }
 }

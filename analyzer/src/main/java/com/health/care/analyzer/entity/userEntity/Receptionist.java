@@ -1,6 +1,6 @@
-package com.health.care.analyzer.entity.users;
+package com.health.care.analyzer.entity.userEntity;
 
-import com.health.care.analyzer.entity.PhlebotomistTest;
+import com.health.care.analyzer.entity.Prescription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,12 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
-@Table(name = "phlebotomist")
-public class Phlebotomist {
+@Table(name = "receptionist")
+public class Receptionist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -39,29 +39,24 @@ public class Phlebotomist {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = {
+    @OneToMany(mappedBy = "receptionist", cascade = {
             CascadeType.DETACH,
-            CascadeType.PERSIST,
             CascadeType.MERGE,
-            CascadeType.REFRESH
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
     }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "phlebotomist_test_phlebotomist",
-            joinColumns = @JoinColumn(name = "phlebotomist_id"),
-            inverseJoinColumns = @JoinColumn(name = "phlebotomist_test_id")
-    )
-    private List<PhlebotomistTest> phlebotomistTestList;
+    private List<Prescription> prescriptionList;
 
-    public void addPhlebotomistTest(PhlebotomistTest phlebotomistTest) {
-        if(phlebotomistTestList == null) {
-            phlebotomistTestList = new ArrayList<>();
+    public void addPrescription(Prescription prescription) {
+        if(prescriptionList == null) {
+            prescriptionList = new ArrayList<>();
         }
-        phlebotomistTestList.add(phlebotomistTest);
+        prescriptionList.add(prescription);
     }
 
-    public void removePhlebotomistTest(PhlebotomistTest phlebotomistTest) {
-        if(phlebotomistTestList != null) {
-            phlebotomistTestList.remove(phlebotomistTest);
+    public void removePrescription(Prescription prescription) {
+        if(prescriptionList != null) {
+            prescriptionList.remove(prescription);
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.health.care.analyzer.entity;
 
-import com.health.care.analyzer.entity.users.Doctor;
-import com.health.care.analyzer.entity.users.Patient;
+import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
+import com.health.care.analyzer.entity.userEntity.Doctor;
+import com.health.care.analyzer.entity.userEntity.Patient;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,7 @@ A unique constraint is enforced by using a unique index.
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "appointment", uniqueConstraints = @UniqueConstraint(columnNames = {"id", "slot", "date", "doctor_id", "patient_id"}))
+@Table(name = "appointment")
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +34,8 @@ public class Appointment {
     @Column(name = "stage", nullable = false)
     private String stage;
 
-    @Column(name = "slot", nullable = false)
-    private Integer slot;
+    @Column(name = "time", nullable = false)
+    private Date time;
 
     @Column(name = "date", nullable = false)
     private Date date;

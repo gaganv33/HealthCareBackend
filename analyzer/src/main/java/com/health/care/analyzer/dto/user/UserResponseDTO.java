@@ -1,7 +1,7 @@
 package com.health.care.analyzer.dto.user;
 
 
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

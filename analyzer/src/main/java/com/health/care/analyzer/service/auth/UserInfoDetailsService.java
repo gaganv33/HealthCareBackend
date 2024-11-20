@@ -2,7 +2,7 @@ package com.health.care.analyzer.service.auth;
 
 import com.health.care.analyzer.dao.user.UserDAO;
 import com.health.care.analyzer.dto.auth.UserInfoDetails;
-import com.health.care.analyzer.entity.users.User;
+import com.health.care.analyzer.entity.userEntity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

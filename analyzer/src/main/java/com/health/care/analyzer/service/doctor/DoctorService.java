@@ -1,7 +1,7 @@
 package com.health.care.analyzer.service.doctor;
 
-import com.health.care.analyzer.entity.users.Doctor;
+import com.health.care.analyzer.entity.userEntity.Doctor;
 
 public interface DoctorService {
-    Doctor save(Doctor doctor);
+    void save(Doctor doctor);
 }

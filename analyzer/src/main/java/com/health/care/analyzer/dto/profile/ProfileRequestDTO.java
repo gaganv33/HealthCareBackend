@@ -1,4 +1,4 @@
-package com.health.care.analyzer.dto.doctor;
+package com.health.care.analyzer.dto.profile;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DoctorRequestDTO {
+public class ProfileRequestDTO {
 
     @NotNull(message = "Date of birth should not be null")
     @Past(message = "Date of birth must be in the past")

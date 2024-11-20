@@ -1,6 +1,7 @@
-package com.health.care.analyzer.entity;
+package com.health.care.analyzer.entity.testEntity;
 
-import com.health.care.analyzer.entity.users.Phlebotomist;
+import com.health.care.analyzer.entity.Appointment;
+import com.health.care.analyzer.entity.userEntity.Phlebotomist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

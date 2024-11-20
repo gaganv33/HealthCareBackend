@@ -1,7 +1,5 @@
-package com.health.care.analyzer.entity;
+package com.health.care.analyzer.entity.medicineEntity;
 
-import com.health.care.analyzer.entity.medicineEntity.Medicine;
-import com.health.care.analyzer.entity.userEntity.Receptionist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,34 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
-@Table(name = "prescription")
-public class Prescription {
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "medicine_vendor")
+public class MedicineVendor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
-    @OneToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @ManyToOne(cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH
-    }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "receptionist_id")
-    private Receptionist receptionist;
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @ManyToMany(cascade = {
             CascadeType.DETACH,
@@ -48,8 +34,8 @@ public class Prescription {
             CascadeType.REFRESH
     }, fetch = FetchType.LAZY)
     @JoinTable(
-            name = "prescription_medicine",
-            joinColumns = @JoinColumn(name = "prescription_id"),
+            name = "medicine_vendor_join",
+            joinColumns = @JoinColumn(name = "medicine_vendor_id"),
             inverseJoinColumns = @JoinColumn(name = "medicine_id")
     )
     private List<Medicine> medicineList;
