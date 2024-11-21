@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.userEntity;
 
+import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -63,5 +64,12 @@ public class Phlebotomist {
         if(phlebotomistTestList != null) {
             phlebotomistTestList.remove(phlebotomistTest);
         }
+    }
+
+    public Phlebotomist(ProfileRequestDTO profileRequestDTO) {
+        this.dob = profileRequestDTO.getDob();
+        this.registeredDate = profileRequestDTO.getRegisteredDate();
+        this.phoneNo = profileRequestDTO.getPhoneNo();
+        this.bloodGroup = profileRequestDTO.getBloodGroup();
     }
 }
