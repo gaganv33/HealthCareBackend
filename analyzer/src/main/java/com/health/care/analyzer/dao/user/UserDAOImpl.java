@@ -34,4 +34,149 @@ public class UserDAOImpl implements UserDAO {
         entityManager.persist(user);
         return user;
     }
+
+    @Override
+    public List<User> getAllUser() {
+        TypedQuery<User> query = entityManager.createQuery("from User u", User.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllAdmin() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role", User.class);
+        query.setParameter("role", "ROLE_ADMIN");
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllDoctor() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role", User.class);
+        query.setParameter("role", "ROLE_DOCTOR");
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllPatient() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role", User.class);
+        query.setParameter("role", "ROLE_PATIENT");
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllReceptionist() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role", User.class);
+        query.setParameter("role", "ROLE_RECEPTIONIST");
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllPhlebotomist() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role", User.class);
+        query.setParameter("role", "ROLE_PHLEBOTOMIST");
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getEnabledUser() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.isEnabled = :isEnabled", User.class);
+        query.setParameter("isEnabled", true);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getDisabledUser() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.isEnabled = :isEnabled", User.class);
+        query.setParameter("isEnabled", false);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllEnabledAdmin() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_ADMIN");
+        query.setParameter("isEnabled", true);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllDisabledAdmin() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_ADMIN");
+        query.setParameter("isEnabled", false);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllEnabledDoctor() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_DOCTOR");
+        query.setParameter("isEnabled", true);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllDisabledDoctor() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_DOCTOR");
+        query.setParameter("isEnabled", false);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllEnabledPatient() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_PATIENT");
+        query.setParameter("isEnabled", true);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllDisabledPatient() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_PATIENT");
+        query.setParameter("isEnabled", false);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllEnabledReceptionist() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_RECEPTIONIST");
+        query.setParameter("isEnabled", true);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllDisabledReceptionist() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_RECEPTIONIST");
+        query.setParameter("isEnabled", false);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllEnabledPhlebotomist() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_PHLEBOTOMIST");
+        query.setParameter("isEnabled", true);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> getAllDisabledPhlebotomist() {
+        TypedQuery<User> query = entityManager.createQuery("from User u where u.role = :role and u.isEnabled = :isEnabled",
+                User.class);
+        query.setParameter("role", "ROLE_PHLEBOTOMIST");
+        query.setParameter("isEnabled", false);
+        return query.getResultList();
+    }
 }

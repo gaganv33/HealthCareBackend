@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.userEntity;
 
+import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.entity.Prescription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class Receptionist {
     @Column(name = "blood_group", nullable = false)
     private String bloodGroup;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -58,5 +59,12 @@ public class Receptionist {
         if(prescriptionList != null) {
             prescriptionList.remove(prescription);
         }
+    }
+
+    public Receptionist(ProfileRequestDTO profileRequestDTO) {
+        this.dob = profileRequestDTO.getDob();
+        this.registeredDate = profileRequestDTO.getRegisteredDate();
+        this.phoneNo = profileRequestDTO.getPhoneNo();
+        this.bloodGroup = profileRequestDTO.getBloodGroup();
     }
 }

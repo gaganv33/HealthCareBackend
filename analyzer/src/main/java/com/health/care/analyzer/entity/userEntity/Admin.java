@@ -37,7 +37,7 @@ public class Admin {
     @Column(name = "dashboard_password", nullable = true)
     private String dashboardPassword;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

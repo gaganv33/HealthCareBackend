@@ -9,4 +9,5 @@ public interface AdminDAO {
     Admin save(Admin admin);
     Optional<Admin> findByUser(User user);
     void update(Admin admin);
+    Admin getAdminProfile(User user);
 }

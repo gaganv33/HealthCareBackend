@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,5 +41,95 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("Username " + username + " not found");
         }
         return user.get();
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userDAO.getAllUser();
+    }
+
+    @Override
+    public List<User> getAllAdmin() {
+        return userDAO.getAllAdmin();
+    }
+
+    @Override
+    public List<User> getAllDoctor() {
+        return userDAO.getAllDoctor();
+    }
+
+    @Override
+    public List<User> getAllPatient() {
+        return userDAO.getAllPatient();
+    }
+
+    @Override
+    public List<User> getAllReceptionist() {
+        return userDAO.getAllReceptionist();
+    }
+
+    @Override
+    public List<User> getAllPhlebotomist() {
+        return userDAO.getAllPhlebotomist();
+    }
+
+    @Override
+    public List<User> getEnabledUser() {
+        return userDAO.getEnabledUser();
+    }
+
+    @Override
+    public List<User> getDisabledUser() {
+        return userDAO.getDisabledUser();
+    }
+
+    @Override
+    public List<User> getAllEnabledAdmin() {
+        return userDAO.getAllEnabledAdmin();
+    }
+
+    @Override
+    public List<User> getAllDisabledAdmin() {
+        return userDAO.getAllDisabledAdmin();
+    }
+
+    @Override
+    public List<User> getAllEnabledDoctor() {
+        return userDAO.getAllEnabledDoctor();
+    }
+
+    @Override
+    public List<User> getAllDisabledDoctor() {
+        return userDAO.getAllDisabledDoctor();
+    }
+
+    @Override
+    public List<User> getAllEnabledPatient() {
+        return userDAO.getAllEnabledPatient();
+    }
+
+    @Override
+    public List<User> getAllDisabledPatient() {
+        return userDAO.getAllDisabledPatient();
+    }
+
+    @Override
+    public List<User> getAllEnabledReceptionist() {
+        return userDAO.getAllEnabledReceptionist();
+    }
+
+    @Override
+    public List<User> getAllDisabledReceptionist() {
+        return userDAO.getAllDisabledReceptionist();
+    }
+
+    @Override
+    public List<User> getAllEnabledPhlebotomist() {
+        return userDAO.getAllEnabledPhlebotomist();
+    }
+
+    @Override
+    public List<User> getAllDisabledPhlebotomist() {
+        return userDAO.getAllDisabledPhlebotomist();
     }
 }

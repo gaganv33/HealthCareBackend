@@ -59,7 +59,7 @@ public class AuthController {
             throw new InvalidRoleException("Invalid role");
         }
         User user = new User(userRequestDTO);
-        user.setIsEnabled(user.getRole().equals("ROLE_ADMIN"));
+        user.setIsEnabled(user.getRole().equals("ROLE_ADMIN") || user.getRole().equals("ROLE_PATIENT"));
         user = userService.save(user);
         return new UserResponseDTO(user);
     }

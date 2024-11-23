@@ -28,7 +28,7 @@ public class Prescription {
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.EAGER)
+    }, fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
@@ -37,7 +37,7 @@ public class Prescription {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH
-    }, fetch = FetchType.EAGER)
+    }, fetch = FetchType.LAZY)
     @JoinColumn(name = "receptionist_id")
     private Receptionist receptionist;
 

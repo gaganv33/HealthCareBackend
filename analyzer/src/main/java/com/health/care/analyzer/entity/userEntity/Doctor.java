@@ -37,7 +37,7 @@ public class Doctor {
     @Column(name = "blood_group", nullable = false)
     private String bloodGroup;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

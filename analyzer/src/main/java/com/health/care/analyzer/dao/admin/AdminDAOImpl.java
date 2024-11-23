@@ -48,4 +48,15 @@ public class AdminDAOImpl implements AdminDAO {
                 .setParameter("user", admin.getUser())
                 .executeUpdate();
     }
+
+    @Override
+    public Admin getAdminProfile(User user) {
+        TypedQuery<Admin> query = entityManager.createQuery("from Admin a where a.user = :user", Admin.class);
+        query.setParameter("user", user);
+        List<Admin> adminList = query.getResultList();
+        if(adminList.isEmpty()) {
+            return new Admin();
+        }
+        return adminList.get(0);
+    }
 }
