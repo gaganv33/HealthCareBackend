@@ -49,4 +49,15 @@ public class PatientDAOImpl implements PatientDAO {
                 .setParameter("user", patient.getUser())
                 .executeUpdate();
     }
+
+    @Override
+    public Patient getPatientProfile(User user) {
+        TypedQuery<Patient> query = entityManager.createQuery("from Patient p where p.user = :user", Patient.class);
+        query.setParameter("user", user);
+        List<Patient> patientList = query.getResultList();
+        if(patientList.isEmpty()) {
+            return new Patient();
+        }
+        return patientList.get(0);
+    }
 }

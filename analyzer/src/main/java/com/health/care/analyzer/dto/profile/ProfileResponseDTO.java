@@ -1,4 +1,4 @@
-package com.health.care.analyzer.dto.admin;
+package com.health.care.analyzer.dto.profile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminResponseDTO {
+public class ProfileResponseDTO {
     private Date dob;
     private String phoneNo;
     private String bloodGroup;

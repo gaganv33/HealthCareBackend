@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.userEntity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.health.care.analyzer.dto.user.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,18 +39,23 @@ public class User {
     @Column(name = "registered_date", nullable = false)
     private Date registeredDate;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Admin admin;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Patient patient;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Phlebotomist phlebotomist;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Receptionist receptionist;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Doctor doctor;
 

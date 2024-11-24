@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 
@@ -35,7 +36,7 @@ public class Appointment {
     private String stage;
 
     @Column(name = "time", nullable = false)
-    private Date time;
+    private LocalTime time;
 
     @Column(name = "date", nullable = false)
     private Date date;
@@ -46,7 +47,7 @@ public class Appointment {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "doctor_id")
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
     @ManyToOne(cascade = {
@@ -55,7 +56,7 @@ public class Appointment {
             CascadeType.MERGE,
             CascadeType.REFRESH
     }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

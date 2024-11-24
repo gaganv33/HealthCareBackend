@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.userEntity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,11 +17,6 @@ import java.util.Date;
 @Builder
 @Table(name = "admin")
 public class Admin {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
     @Column(name = "dob", nullable = false)
     private Date dob;
 
@@ -40,6 +36,8 @@ public class Admin {
     @Column(name = "dashboard_password", nullable = true)
     private String dashboardPassword;
 
+    @Id
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

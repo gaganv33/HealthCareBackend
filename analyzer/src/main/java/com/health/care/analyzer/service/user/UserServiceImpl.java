@@ -1,6 +1,8 @@
 package com.health.care.analyzer.service.user;
 
 import com.health.care.analyzer.dao.user.UserDAO;
+import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
+import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
 import jakarta.transaction.Transactional;
@@ -44,93 +46,93 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUser() {
-        return userDAO.getAllUser();
+    public List<UserResponseDTO> getAllUser() {
+        return userDAO.getAllUser().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllAdmin() {
-        return userDAO.getAllAdmin();
+    public List<UserResponseDTO> getAllAdmin() {
+        return userDAO.getAllAdmin().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllDoctor() {
-        return userDAO.getAllDoctor();
+    public List<UserResponseDTO> getAllDoctor() {
+        return userDAO.getAllDoctor().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllPatient() {
-        return userDAO.getAllPatient();
+    public List<UserResponseDTO> getAllPatient() {
+        return userDAO.getAllPatient().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllReceptionist() {
-        return userDAO.getAllReceptionist();
+    public List<UserResponseDTO> getAllReceptionist() {
+        return userDAO.getAllReceptionist().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllPhlebotomist() {
-        return userDAO.getAllPhlebotomist();
+    public List<UserResponseDTO> getAllPhlebotomist() {
+        return userDAO.getAllPhlebotomist().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getEnabledUser() {
-        return userDAO.getEnabledUser();
+    public List<UserResponseDTO> getEnabledUser() {
+        return userDAO.getEnabledUser().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getDisabledUser() {
-        return userDAO.getDisabledUser();
+    public List<UserResponseDTO> getDisabledUser() {
+        return userDAO.getDisabledUser().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllEnabledAdmin() {
-        return userDAO.getAllEnabledAdmin();
+    public List<UserResponseDTO> getAllEnabledAdmin() {
+        return userDAO.getAllEnabledAdmin().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllDisabledAdmin() {
-        return userDAO.getAllDisabledAdmin();
+    public List<UserResponseDTO> getAllDisabledAdmin() {
+        return userDAO.getAllDisabledAdmin().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllEnabledDoctor() {
-        return userDAO.getAllEnabledDoctor();
+    public List<UserResponseDTO> getAllEnabledDoctor() {
+        return userDAO.getAllEnabledDoctor().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllDisabledDoctor() {
-        return userDAO.getAllDisabledDoctor();
+    public List<UserResponseDTO> getAllDisabledDoctor() {
+        return userDAO.getAllDisabledDoctor().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllEnabledPatient() {
-        return userDAO.getAllEnabledPatient();
+    public List<UserResponseDTO> getAllEnabledPatient() {
+        return userDAO.getAllEnabledPatient().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllDisabledPatient() {
-        return userDAO.getAllDisabledPatient();
+    public List<UserResponseDTO> getAllDisabledPatient() {
+        return userDAO.getAllDisabledPatient().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllEnabledReceptionist() {
-        return userDAO.getAllEnabledReceptionist();
+    public List<UserResponseDTO> getAllEnabledReceptionist() {
+        return userDAO.getAllEnabledReceptionist().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllDisabledReceptionist() {
-        return userDAO.getAllDisabledReceptionist();
+    public List<UserResponseDTO> getAllDisabledReceptionist() {
+        return userDAO.getAllDisabledReceptionist().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllEnabledPhlebotomist() {
-        return userDAO.getAllEnabledPhlebotomist();
+    public List<UserResponseDTO> getAllEnabledPhlebotomist() {
+        return userDAO.getAllEnabledPhlebotomist().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
-    public List<User> getAllDisabledPhlebotomist() {
-        return userDAO.getAllDisabledPhlebotomist();
+    public List<UserResponseDTO> getAllDisabledPhlebotomist() {
+        return userDAO.getAllDisabledPhlebotomist().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override
@@ -149,5 +151,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUser(String username) {
         userDAO.deleteUser(username);
+    }
+
+    @Override
+    public List<String> getEnabledDoctorUsername() {
+        List<User> doctorList = userDAO.getAllEnabledDoctor();
+        return doctorList.stream().map(User::getUsername).toList();
+    }
+
+    @Override
+    public List<UserProfileResponseDTO> getEnabledDoctorProfile() {
+        List<User> doctorList = userDAO.getAllEnabledDoctor();
+        return doctorList.stream().map(doctor -> {
+            return UserProfileResponseDTO.builder()
+                    .username(doctor.getUsername())
+                    .firstName(doctor.getFirstName())
+                    .lastName(doctor.getLastName())
+                    .build();
+        }).toList();
     }
 }

@@ -1,6 +1,7 @@
 package com.health.care.analyzer.service.admin;
 
 import com.health.care.analyzer.dao.admin.AdminDAO;
+import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
 import com.health.care.analyzer.entity.userEntity.Admin;
 import com.health.care.analyzer.entity.userEntity.User;
 import jakarta.transaction.Transactional;
@@ -30,7 +31,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Admin getAdminProfile(User user) {
-        return adminDAO.getAdminProfile(user);
+    public ProfileResponseDTO getAdminProfile(User user) {
+        Admin admin = adminDAO.getAdminProfile(user);
+        return ProfileResponseDTO.builder()
+                .dob(admin.getDob())
+                .phoneNo(admin.getPhoneNo())
+                .bloodGroup(admin.getBloodGroup())
+                .weight(admin.getWeight())
+                .height(admin.getHeight())
+                .build();
     }
 }

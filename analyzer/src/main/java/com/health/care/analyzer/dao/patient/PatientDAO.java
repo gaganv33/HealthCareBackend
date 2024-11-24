@@ -9,4 +9,5 @@ public interface PatientDAO {
     Patient save(Patient patient);
     Optional<Patient> findByUser(User user);
     void update(Patient patient);
+    Patient getPatientProfile(User user);
 }

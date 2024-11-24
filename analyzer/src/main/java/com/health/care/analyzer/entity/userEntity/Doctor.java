@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.userEntity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Designation;
@@ -20,11 +21,6 @@ import java.util.List;
 @Data
 @Table(name = "doctor")
 public class Doctor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
     @Column(name = "dob", nullable = false)
     private Date dob;
 
@@ -40,6 +36,8 @@ public class Doctor {
     @Column(name = "weight", nullable = false)
     private Integer weight;
 
+    @Id
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

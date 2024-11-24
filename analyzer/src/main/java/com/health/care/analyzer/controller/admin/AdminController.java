@@ -1,8 +1,9 @@
 package com.health.care.analyzer.controller.admin;
 
-import com.health.care.analyzer.dto.admin.AdminResponseDTO;
+
 import com.health.care.analyzer.dto.admin.ModifyUserRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
+import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.userEntity.Admin;
 import com.health.care.analyzer.entity.userEntity.User;
@@ -57,27 +58,19 @@ public class AdminController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<AdminResponseDTO> getAdminProfile(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<ProfileResponseDTO> getAdminProfile(HttpServletRequest httpServletRequest) {
         String authorization = httpServletRequest.getHeader("Authorization");
         String token = authorization.substring(7);
         String username = jwtService.extractUsername(token);
         User user = userService.findByUsername(username);
 
-        Admin admin = adminService.getAdminProfile(user);
-        AdminResponseDTO adminResponseDTO = AdminResponseDTO.builder()
-                .dob(admin.getDob())
-                .phoneNo(admin.getPhoneNo())
-                .bloodGroup(admin.getBloodGroup())
-                .weight(admin.getWeight())
-                .height(admin.getHeight())
-                .build();
-        return new ResponseEntity<>(adminResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(adminService.getAdminProfile(user), HttpStatus.OK);
     }
 
     @GetMapping("/all/user")
     public ResponseEntity<List<UserResponseDTO>> getAllUser(@RequestParam(name = "role", required = false) String role,
                                                             @RequestParam(name = "isEnabled", required = false) Boolean isEnabled) {
-        List<User> userList = userService.getAllUser();
+        List<UserResponseDTO> userList = userService.getAllUser();
 
         if(role != null && isEnabled == null) {
             userList = switch (role) {
@@ -120,8 +113,7 @@ public class AdminController {
             }
         }
 
-        List<UserResponseDTO> userResponseDTOList = userList.stream().map(UserResponseDTO::new).toList();
-        return new ResponseEntity<>(userResponseDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @PostMapping("/enable/user")
