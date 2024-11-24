@@ -27,14 +27,18 @@ public class Patient {
     @Column(name = "dob", nullable = false)
     private Date dob;
 
-    @Column(name = "registered_date", nullable = false)
-    private Date registeredDate;
 
     @Column(name = "phone_no", nullable = false)
     private String phoneNo;
 
     @Column(name = "blood_group", nullable = false)
     private String bloodGroup;
+
+    @Column(name = "height", nullable = false)
+    private Integer height;
+
+    @Column(name = "weight", nullable = false)
+    private Integer weight;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -58,8 +62,9 @@ public class Patient {
 
     public Patient(ProfileRequestDTO profileRequestDTO) {
         this.dob = profileRequestDTO.getDob();
-        this.registeredDate = profileRequestDTO.getRegisteredDate();
         this.phoneNo = profileRequestDTO.getPhoneNo();
         this.bloodGroup = profileRequestDTO.getBloodGroup();
+        this.weight = profileRequestDTO.getWeight();
+        this.height = profileRequestDTO.getHeight();
     }
 }

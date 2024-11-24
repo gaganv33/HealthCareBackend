@@ -66,9 +66,10 @@ public class AdminController {
         Admin admin = adminService.getAdminProfile(user);
         AdminResponseDTO adminResponseDTO = AdminResponseDTO.builder()
                 .dob(admin.getDob())
-                .registeredDate(admin.getRegisteredDate())
                 .phoneNo(admin.getPhoneNo())
                 .bloodGroup(admin.getBloodGroup())
+                .weight(admin.getWeight())
+                .height(admin.getHeight())
                 .build();
         return new ResponseEntity<>(adminResponseDTO, HttpStatus.OK);
     }

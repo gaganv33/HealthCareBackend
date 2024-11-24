@@ -13,7 +13,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class AdminResponseDTO {
     private Date dob;
-    private Date registeredDate;
     private String phoneNo;
     private String bloodGroup;
+    private Integer weight;
+    private Integer height;
 }

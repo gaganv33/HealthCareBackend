@@ -39,10 +39,11 @@ public class PhlebotomistDAOImpl implements PhlebotomistDAO {
 
     @Override
     public void update(Phlebotomist phlebotomist) {
-        entityManager.createQuery("update Phlebotomist p set p.dob = :dob, p.registeredDate = :registeredDate, " +
+        entityManager.createQuery("update Phlebotomist p set p.dob = :dob, p.weight = :weight, p.height = :height" +
                 "p.phoneNo = :phoneNo, p.bloodGroup = :bloodGroup where p.user = :user")
                 .setParameter("dob", phlebotomist.getDob())
-                .setParameter("registeredDate", phlebotomist.getRegisteredDate())
+                .setParameter("weight", phlebotomist.getWeight())
+                .setParameter("height", phlebotomist.getHeight())
                 .setParameter("phoneNo", phlebotomist.getPhoneNo())
                 .setParameter("bloodGroup", phlebotomist.getBloodGroup())
                 .setParameter("user", phlebotomist.getUser())

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -32,6 +34,9 @@ public class User {
 
     @Column(name = "is_enabled", nullable = false)
     private Boolean isEnabled;
+
+    @Column(name = "registered_date", nullable = false)
+    private Date registeredDate;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Admin admin;

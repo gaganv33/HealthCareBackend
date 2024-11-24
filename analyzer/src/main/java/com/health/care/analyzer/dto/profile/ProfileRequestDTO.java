@@ -15,10 +15,6 @@ public class ProfileRequestDTO {
     @Past(message = "Date of birth must be in the past")
     private Date dob;
 
-    @NotNull(message = "Registered date should not be null")
-    @PastOrPresent(message = "Registered date must be in the past or present")
-    private Date registeredDate;
-
     @NotBlank(message = "Phone number should not be blank")
     @Pattern(
             regexp = "^[0-9]{10}$",
@@ -32,4 +28,10 @@ public class ProfileRequestDTO {
             message = "Blood group must be A+, A-, B+, B-, AB+, AB-, O+, or O-"
     )
     private String bloodGroup;
+
+    @NotNull(message = "height cannot be null")
+    private Integer height;
+
+    @NotNull(message = "weight cannot be null")
+    private Integer weight;
 }

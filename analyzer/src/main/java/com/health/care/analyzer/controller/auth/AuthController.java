@@ -25,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -60,6 +61,7 @@ public class AuthController {
         }
         User user = new User(userRequestDTO);
         user.setIsEnabled(user.getRole().equals("ROLE_ADMIN") || user.getRole().equals("ROLE_PATIENT"));
+        user.setRegisteredDate(new Date());
         user = userService.save(user);
         return new UserResponseDTO(user);
     }

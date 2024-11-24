@@ -39,10 +39,11 @@ public class ReceptionistDAOImpl implements ReceptionistDAO {
 
     @Override
     public void update(Receptionist receptionist) {
-        entityManager.createQuery("update Receptionist r set r.dob = :dob, r.registeredDate = :registeredDate, " +
+        entityManager.createQuery("update Receptionist r set r.dob = :dob, r.weight = :weight, r.height = height" +
                 "r.phoneNo = :phoneNo, r.bloodGroup = :bloodGroup where r.user = :user")
                 .setParameter("dob", receptionist.getDob())
-                .setParameter("registeredDate", receptionist.getRegisteredDate())
+                .setParameter("weight", receptionist.getWeight())
+                .setParameter("height", receptionist.getHeight())
                 .setParameter("phoneNo", receptionist.getPhoneNo())
                 .setParameter("bloodGroup", receptionist.getBloodGroup())
                 .setParameter("user", receptionist.getUser())
