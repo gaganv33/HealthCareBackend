@@ -179,4 +179,27 @@ public class UserDAOImpl implements UserDAO {
         query.setParameter("isEnabled", false);
         return query.getResultList();
     }
+
+    @Override
+    public void enableUser(String username) {
+        entityManager.createQuery("update User u set u.isEnabled = :isEnabled where u.username = :username")
+                .setParameter("isEnabled", true)
+                .setParameter("username", username)
+                .executeUpdate();
+    }
+
+    @Override
+    public void disableUser(String username) {
+        entityManager.createQuery("update User u set u.isEnabled = :isEnabled where u.username = :username")
+                .setParameter("isEnabled", false)
+                .setParameter("username", username)
+                .executeUpdate();
+    }
+
+    @Override
+    public void deleteUser(String username) {
+        entityManager.createQuery("delete User u where u.username = :username")
+                .setParameter("username", username)
+                .executeUpdate();
+    }
 }

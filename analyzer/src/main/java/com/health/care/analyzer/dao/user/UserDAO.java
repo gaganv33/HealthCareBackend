@@ -26,4 +26,7 @@ public interface UserDAO {
     List<User> getAllDisabledReceptionist();
     List<User> getAllEnabledPhlebotomist();
     List<User> getAllDisabledPhlebotomist();
+    void enableUser(String username);
+    void disableUser(String username);
+    void deleteUser(String username);
 }

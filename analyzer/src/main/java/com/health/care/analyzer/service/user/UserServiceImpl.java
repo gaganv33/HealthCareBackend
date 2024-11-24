@@ -132,4 +132,22 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllDisabledPhlebotomist() {
         return userDAO.getAllDisabledPhlebotomist();
     }
+
+    @Override
+    @Transactional
+    public void enableUser(String username) {
+        userDAO.enableUser(username);
+    }
+
+    @Override
+    @Transactional
+    public void disableUser(String username) {
+        userDAO.disableUser(username);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(String username) {
+        userDAO.deleteUser(username);
+    }
 }

@@ -1,6 +1,7 @@
 package com.health.care.analyzer.controller.admin;
 
 import com.health.care.analyzer.dto.admin.AdminResponseDTO;
+import com.health.care.analyzer.dto.admin.ModifyUserRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.userEntity.Admin;
@@ -120,5 +121,23 @@ public class AdminController {
 
         List<UserResponseDTO> userResponseDTOList = userList.stream().map(UserResponseDTO::new).toList();
         return new ResponseEntity<>(userResponseDTOList, HttpStatus.OK);
+    }
+
+    @PostMapping("/enable/user")
+    public ResponseEntity<String> enableUser(@RequestBody @Valid ModifyUserRequestDTO modifyUserRequestDTO) {
+        userService.enableUser(modifyUserRequestDTO.getUsername());
+        return new ResponseEntity<>("User is enabled", HttpStatus.OK);
+    }
+
+    @PostMapping("/disable/user")
+    public ResponseEntity<String> disableUser(@RequestBody @Valid ModifyUserRequestDTO modifyUserRequestDTO) {
+        userService.disableUser(modifyUserRequestDTO.getUsername());
+        return new ResponseEntity<>("User is disabled", HttpStatus.OK);
+    }
+
+    @PostMapping("/delete/user")
+    public ResponseEntity<String> deleteUser(@RequestBody @Valid ModifyUserRequestDTO modifyUserRequestDTO) {
+        userService.deleteUser(modifyUserRequestDTO.getUsername());
+        return new ResponseEntity<>("User deleted", HttpStatus.OK);
     }
 }
