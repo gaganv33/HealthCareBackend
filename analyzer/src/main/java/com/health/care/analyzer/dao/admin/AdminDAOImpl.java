@@ -39,7 +39,7 @@ public class AdminDAOImpl implements AdminDAO {
     @Override
     public void update(Admin admin) {
         entityManager.createQuery(
-                "update Admin a set a.dob = :dob, a.weight = :weight, a.height = :height" +
+                "update Admin a set a.dob = :dob, a.weight = :weight, a.height = :height, " +
                         "a.phoneNo = :phoneNo, a.bloodGroup = :bloodGroup where a.user = :user")
                 .setParameter("dob", admin.getDob())
                 .setParameter("weight", admin.getWeight())

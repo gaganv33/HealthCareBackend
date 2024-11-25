@@ -73,12 +73,12 @@ public class PatientController {
 
     @GetMapping("/all/doctor/username")
     public ResponseEntity<List<String>> getEnabledDoctorUsername() {
-        return new ResponseEntity<>(userService.getEnabledDoctorUsername(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getEnabledDoctorWithValidProfileUsername(), HttpStatus.OK);
     }
 
     @GetMapping("/all/doctor/profile")
-    public ResponseEntity<List<UserProfileResponseDTO>> getEnabledDoctorProfile() {
-        return new ResponseEntity<>(userService.getEnabledDoctorProfile(), HttpStatus.OK);
+    public ResponseEntity<List<UserProfileResponseDTO>> getEnabledDoctorWithProfile() {
+        return new ResponseEntity<>(userService.getEnabledDoctorWithValidProfile(), HttpStatus.OK);
     }
 
     @PostMapping("/book/appointment")

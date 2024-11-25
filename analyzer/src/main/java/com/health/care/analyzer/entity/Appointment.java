@@ -47,7 +47,7 @@ public class Appointment {
             CascadeType.PERSIST,
             CascadeType.REFRESH
     }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
     @ManyToOne(cascade = {
@@ -56,7 +56,7 @@ public class Appointment {
             CascadeType.MERGE,
             CascadeType.REFRESH
     }, fetch = FetchType.EAGER)
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

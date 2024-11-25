@@ -195,11 +195,4 @@ public class UserDAOImpl implements UserDAO {
                 .setParameter("username", username)
                 .executeUpdate();
     }
-
-    @Override
-    public void deleteUser(String username) {
-        entityManager.createQuery("delete User u where u.username = :username")
-                .setParameter("username", username)
-                .executeUpdate();
-    }
 }

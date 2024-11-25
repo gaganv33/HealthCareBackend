@@ -127,10 +127,4 @@ public class AdminController {
         userService.disableUser(modifyUserRequestDTO.getUsername());
         return new ResponseEntity<>("User is disabled", HttpStatus.OK);
     }
-
-    @PostMapping("/delete/user")
-    public ResponseEntity<String> deleteUser(@RequestBody @Valid ModifyUserRequestDTO modifyUserRequestDTO) {
-        userService.deleteUser(modifyUserRequestDTO.getUsername());
-        return new ResponseEntity<>("User deleted", HttpStatus.OK);
-    }
 }

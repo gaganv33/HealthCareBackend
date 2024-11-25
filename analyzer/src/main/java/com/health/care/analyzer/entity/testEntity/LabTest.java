@@ -17,10 +17,6 @@ import java.util.List;
 @Table(name = "lab_test")
 public class LabTest {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
     @Column(name = "name", nullable = false)
     private String name;
 

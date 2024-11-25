@@ -39,7 +39,7 @@ public class PatientDAOImpl implements PatientDAO {
 
     @Override
     public void update(Patient patient) {
-        entityManager.createQuery("update Patient p set p.dob = :dob, p.weight = :weight, p.height = :height" +
+        entityManager.createQuery("update Patient p set p.dob = :dob, p.weight = :weight, p.height = :height, " +
                 "p.phoneNo = :phoneNo, p.bloodGroup = :bloodGroup where p.user = :user")
                 .setParameter("dob", patient.getDob())
                 .setParameter("weight", patient.getWeight())

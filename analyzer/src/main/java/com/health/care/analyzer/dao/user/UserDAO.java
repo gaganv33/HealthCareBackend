@@ -28,5 +28,4 @@ public interface UserDAO {
     List<User> getAllDisabledPhlebotomist();
     void enableUser(String username);
     void disableUser(String username);
-    void deleteUser(String username);
 }
