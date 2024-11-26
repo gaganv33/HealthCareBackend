@@ -1,6 +1,7 @@
 package com.health.care.analyzer.controller.admin;
 
 
+import com.health.care.analyzer.data.UserRole;
 import com.health.care.analyzer.dto.admin.ModifyUserRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
@@ -18,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -70,50 +70,59 @@ public class AdminController {
     @GetMapping("/all/user")
     public ResponseEntity<List<UserResponseDTO>> getAllUser(@RequestParam(name = "role", required = false) String role,
                                                             @RequestParam(name = "isEnabled", required = false) Boolean isEnabled) {
-        List<UserResponseDTO> userList = userService.getAllUser();
-
-        if(role != null && isEnabled == null) {
-            userList = switch (role) {
-                case "ROLE_ADMIN" -> userService.getAllAdmin();
-                case "ROLE_DOCTOR" -> userService.getAllDoctor();
-                case "ROLE_PATIENT" -> userService.getAllPatient();
-                case "ROLE_RECEPTIONIST" -> userService.getAllReceptionist();
-                case "ROLE_PHLEBOTOMIST" -> userService.getAllPhlebotomist();
-                default -> userList;
-            };
-        } else if(role == null && isEnabled != null) {
-            if(isEnabled) {
-                userList = userService.getEnabledUser();
-            } else {
-                userList = userService.getDisabledUser();
-            }
-        } else if(role != null && isEnabled != null) {
-            if(role.equals("ROLE_ADMIN") && isEnabled) {
-                userList = userService.getAllEnabledAdmin();
-            } else if(role.equals("ROLE_ADMIN") && !isEnabled) {
-                userList = userService.getAllDisabledAdmin();
-            } else if(role.equals("ROLE_DOCTOR") && isEnabled) {
-                userList = userService.getAllEnabledDoctor();
-            } else if(role.equals("ROLE_DOCTOR") && !isEnabled) {
-                userList = userService.getAllDisabledDoctor();
-            } else if(role.equals("ROLE_PATIENT") && isEnabled) {
-                userList = userService.getAllEnabledPatient();
-            } else if(role.equals("ROLE_PATIENT") && !isEnabled) {
-                userList = userService.getAllDisabledPatient();
-            } else if(role.equals("ROLE_RECEPTIONIST") && isEnabled) {
-                userList = userService.getAllEnabledReceptionist();
-            } else if(role.equals("ROLE_RECEPTIONIST") && !isEnabled) {
-                userList = userService.getAllDisabledReceptionist();
-            } else if(role.equals("ROLE_PHLEBOTOMIST") && isEnabled) {
-                userList = userService.getAllEnabledPhlebotomist();
-            } else if(role.equals("ROLE_PHLEBOTOMIST") && !isEnabled) {
-                userList = userService.getAllDisabledPhlebotomist();
-            } else {
-                userList = new ArrayList<>();
-            }
-        }
-
+        List<UserResponseDTO> userList = getAllUsersBasedOnRoleAndIsEnabled(role, isEnabled);
         return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    private List<UserResponseDTO> getAllUsersBasedOnRoleAndIsEnabled(String role, Boolean isEnabled) {
+        if(role == null && isEnabled == null) {
+            return userService.getAllUser();
+        } else if(role != null && isEnabled == null) {
+            return getAllUsersBasedOnRole(role);
+        } else if(role == null) {
+            return getAllUsersBasedOnIsEnabled(isEnabled);
+        }
+        if(isEnabled) {
+            return getAllEnabledUsersByRole(role);
+        }
+        return getAllDisabledUsersByRole(role);
+    }
+
+    private List<UserResponseDTO> getAllUsersBasedOnRole(String role) {
+        return switch(role) {
+            case UserRole.ADMIN -> userService.getAllAdmin();
+            case UserRole.DOCTOR -> userService.getAllDoctor();
+            case UserRole.PATIENT -> userService.getAllPatient();
+            case UserRole.PHLEBOTOMIST -> userService.getAllPhlebotomist();
+            case UserRole.RECEPTIONIST -> userService.getAllReceptionist();
+            default -> userService.getAllUser();
+        };
+    }
+
+    private List<UserResponseDTO> getAllUsersBasedOnIsEnabled(Boolean isEnabled) {
+        return isEnabled ? userService.getEnabledUser() : userService.getDisabledUser();
+    }
+
+    private List<UserResponseDTO> getAllEnabledUsersByRole(String role) {
+        return switch(role) {
+            case UserRole.ADMIN -> userService.getAllEnabledAdmin();
+            case UserRole.DOCTOR -> userService.getAllEnabledDoctor();
+            case UserRole.PATIENT -> userService.getAllEnabledPatient();
+            case UserRole.PHLEBOTOMIST -> userService.getAllEnabledPhlebotomist();
+            case UserRole.RECEPTIONIST -> userService.getAllEnabledReceptionist();
+            default -> userService.getAllUser();
+        };
+    }
+
+    private final List<UserResponseDTO> getAllDisabledUsersByRole(String role) {
+        return switch(role) {
+            case UserRole.ADMIN -> userService.getAllDisabledAdmin();
+            case UserRole.DOCTOR -> userService.getAllDisabledDoctor();
+            case UserRole.PATIENT -> userService.getAllDisabledPatient();
+            case UserRole.PHLEBOTOMIST -> userService.getAllDisabledPhlebotomist();
+            case UserRole.RECEPTIONIST -> userService.getAllDisabledReceptionist();
+            default -> userService.getAllUser();
+        };
     }
 
     @PostMapping("/enable/user")

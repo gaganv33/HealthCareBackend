@@ -30,6 +30,6 @@ public interface UserService {
     List<UserResponseDTO> getAllDisabledPhlebotomist();
     void enableUser(String username);
     void disableUser(String username);
-    List<String> getEnabledDoctorWithValidProfileUsername();
-    List<UserProfileResponseDTO> getEnabledDoctorWithValidProfile();
+    List<String> getEnabledDoctorUsername();
+    List<UserProfileResponseDTO> getEnabledDoctorProfile();
 }

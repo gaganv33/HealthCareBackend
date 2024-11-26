@@ -1,11 +1,12 @@
 package com.health.care.analyzer.validate;
 
+import com.health.care.analyzer.data.UserRole;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Validation {
     public boolean isRoleValid(String role) {
-        return role.equals("ROLE_ADMIN") || role.equals("ROLE_PATIENT") || role.equals("ROLE_DOCTOR") ||
-                role.equals("ROLE_RECEPTIONIST") || role.equals("ROLE_PHLEBOTOMIST");
+        return role.equals(UserRole.ADMIN) || role.equals(UserRole.PATIENT) || role.equals(UserRole.DOCTOR) ||
+                role.equals(UserRole.RECEPTIONIST) || role.equals(UserRole.PHLEBOTOMIST);
     }
 }

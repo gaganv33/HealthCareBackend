@@ -1,5 +1,6 @@
 package com.health.care.analyzer.controller.patient;
 
+import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.patient.BookAppointmentRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -73,12 +75,12 @@ public class PatientController {
 
     @GetMapping("/all/doctor/username")
     public ResponseEntity<List<String>> getEnabledDoctorUsername() {
-        return new ResponseEntity<>(userService.getEnabledDoctorWithValidProfileUsername(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getEnabledDoctorUsername(), HttpStatus.OK);
     }
 
     @GetMapping("/all/doctor/profile")
     public ResponseEntity<List<UserProfileResponseDTO>> getEnabledDoctorWithProfile() {
-        return new ResponseEntity<>(userService.getEnabledDoctorWithValidProfile(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getEnabledDoctorProfile(), HttpStatus.OK);
     }
 
     @PostMapping("/book/appointment")
@@ -102,5 +104,30 @@ public class PatientController {
 
         appointmentService.save(appointment);
         return new ResponseEntity<>("Appointment booked", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/appointment/{id}")
+    public ResponseEntity<String> deleteAppointmentById(@PathVariable("id") long id) {
+        appointmentService.deleteById(id);
+        return new ResponseEntity<> ("Appointment deleted", HttpStatus.OK);
+    }
+
+    @GetMapping("/all/appointment")
+    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointment(
+            @RequestParam(name = "stage", required = false) String stage,
+            @RequestParam(name = "doctor", required = false) String doctorUsername,
+            @RequestParam(name = "date", required = false) Date date, HttpServletRequest httpServletRequest) {
+        String authorization = httpServletRequest.getHeader("Authorization");
+        String token = authorization.substring(7);
+        String patientUsername = jwtService.extractUsername(token);
+        Patient patient = userService.findByUsername(patientUsername).getPatient();
+
+        List<AppointmentResponseDTO> appointments = appointmentService.getAllAppointmentUsingPatient(patient);
+
+        if(stage != null && doctorUsername == null && date == null) {
+            appointments = appointmentService.getAllAppointmentUsingPatientAndStage(patient, stage);
+        }
+
+        return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 }

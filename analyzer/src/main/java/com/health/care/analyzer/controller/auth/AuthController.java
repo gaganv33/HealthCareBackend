@@ -1,5 +1,6 @@
 package com.health.care.analyzer.controller.auth;
 
+import com.health.care.analyzer.data.UserRole;
 import com.health.care.analyzer.dto.auth.AuthRequestDTO;
 import com.health.care.analyzer.dto.auth.JwtResponse;
 import com.health.care.analyzer.dto.auth.RefreshTokenRequestDTO;
@@ -60,10 +61,10 @@ public class AuthController {
             throw new InvalidRoleException("Invalid role");
         }
         User user = new User(userRequestDTO);
-        user.setIsEnabled(user.getRole().equals("ROLE_ADMIN") || user.getRole().equals("ROLE_PATIENT"));
+        user.setIsEnabled(user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.PATIENT));
         user.setRegisteredDate(new Date());
         switch (user.getRole()) {
-            case "ROLE_ADMIN" -> {
+            case UserRole.ADMIN -> {
                 Admin admin = Admin.builder()
                         .dob(userRequestDTO.getDob())
                         .phoneNo(userRequestDTO.getPhoneNo())
@@ -73,7 +74,7 @@ public class AuthController {
                         .user(user).build();
                 user.setAdmin(admin);
             }
-            case "ROLE_DOCTOR" -> {
+            case UserRole.DOCTOR -> {
                 Doctor doctor = Doctor.builder()
                         .dob(userRequestDTO.getDob())
                         .phoneNo(userRequestDTO.getPhoneNo())
@@ -83,7 +84,7 @@ public class AuthController {
                         .user(user).build();
                 user.setDoctor(doctor);
             }
-            case "ROLE_PATIENT" -> {
+            case UserRole.PATIENT -> {
                 Patient patient = Patient.builder()
                         .dob(userRequestDTO.getDob())
                         .phoneNo(userRequestDTO.getPhoneNo())
@@ -93,7 +94,7 @@ public class AuthController {
                         .user(user).build();
                 user.setPatient(patient);
             }
-            case "ROLE_RECEPTIONIST" -> {
+            case UserRole.RECEPTIONIST -> {
                 Receptionist receptionist = Receptionist.builder()
                         .dob(userRequestDTO.getDob())
                         .phoneNo(userRequestDTO.getPhoneNo())
@@ -103,7 +104,7 @@ public class AuthController {
                         .user(user).build();
                 user.setReceptionist(receptionist);
             }
-            case "ROLE_PHLEBOTOMIST" -> {
+            case UserRole.PHLEBOTOMIST -> {
                 Phlebotomist phlebotomist = Phlebotomist.builder()
                         .dob(userRequestDTO.getDob())
                         .phoneNo(userRequestDTO.getPhoneNo())

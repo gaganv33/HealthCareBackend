@@ -149,32 +149,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> getEnabledDoctorWithValidProfileUsername() {
+    public List<String> getEnabledDoctorUsername() {
         List<User> doctorList = userDAO.getAllEnabledDoctor();
-        List<String> doctorWithValidProfile = new ArrayList<>();
-        for(User doctor : doctorList) {
-            if(doctor.getDoctor() != null) {
-                doctorWithValidProfile.add(doctor.getUsername());
-            }
-        }
-        return doctorWithValidProfile;
+        return doctorList.stream().map(User::getUsername).toList();
     }
 
     @Override
-    public List<UserProfileResponseDTO> getEnabledDoctorWithValidProfile() {
+    public List<UserProfileResponseDTO> getEnabledDoctorProfile() {
         List<User> doctorList = userDAO.getAllEnabledDoctor();
-        List<UserProfileResponseDTO> doctorWithValidProfile = new ArrayList<>();
-        for(User doctor : doctorList) {
-            if(doctor.getDoctor() != null) {
-                doctorWithValidProfile.add(
-                        UserProfileResponseDTO.builder()
-                                .username(doctor.getUsername())
-                                .firstName(doctor.getFirstName())
-                                .lastName(doctor.getLastName())
-                                .build()
-                );
-            }
-        }
-        return doctorWithValidProfile;
+        return doctorList.stream().map(doctor -> UserProfileResponseDTO.builder()
+                .username(doctor.getUsername())
+                .firstName(doctor.getFirstName())
+                .lastName(doctor.getLastName()).build()).toList();
     }
 }
