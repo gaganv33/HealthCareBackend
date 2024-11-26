@@ -1,10 +1,9 @@
 package com.health.care.analyzer.dto.user;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Data
 @Builder
@@ -20,6 +19,30 @@ public class UserRequestDTO {
 
     @NotBlank(message = "lastName should not be blank")
     private String lastName;
+
+    @NotNull(message = "Date of birth should not be null")
+    @Past(message = "Date of birth must be in the past")
+    private Date dob;
+
+    @NotBlank(message = "Phone number should not be blank")
+    @Pattern(
+            regexp = "^[0-9]{10}$",
+            message = "Phone number must be 10 digits"
+    )
+    private String phoneNo;
+
+    @NotBlank(message = "Blood group should not be blank")
+    @Pattern(
+            regexp = "^(A|B|AB|O)[+-]$",
+            message = "Blood group must be A+, A-, B+, B-, AB+, AB-, O+, or O-"
+    )
+    private String bloodGroup;
+
+    @NotNull(message = "height cannot be null")
+    private Integer height;
+
+    @NotNull(message = "weight cannot be null")
+    private Integer weight;
 
     @NotBlank(message = "password should not be blank")
     @Size(min = 4, max = 20, message = "Min password length is 4 and max password length is 20")

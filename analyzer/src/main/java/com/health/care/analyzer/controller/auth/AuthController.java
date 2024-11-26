@@ -6,7 +6,7 @@ import com.health.care.analyzer.dto.auth.RefreshTokenRequestDTO;
 import com.health.care.analyzer.dto.user.UserRequestDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.RefreshToken;
-import com.health.care.analyzer.entity.userEntity.User;
+import com.health.care.analyzer.entity.userEntity.*;
 import com.health.care.analyzer.exception.InvalidRefreshTokenException;
 import com.health.care.analyzer.exception.InvalidRoleException;
 import com.health.care.analyzer.exception.UnauthorizedException;
@@ -62,6 +62,58 @@ public class AuthController {
         User user = new User(userRequestDTO);
         user.setIsEnabled(user.getRole().equals("ROLE_ADMIN") || user.getRole().equals("ROLE_PATIENT"));
         user.setRegisteredDate(new Date());
+        switch (user.getRole()) {
+            case "ROLE_ADMIN" -> {
+                Admin admin = Admin.builder()
+                        .dob(userRequestDTO.getDob())
+                        .phoneNo(userRequestDTO.getPhoneNo())
+                        .bloodGroup(userRequestDTO.getBloodGroup())
+                        .height(userRequestDTO.getHeight())
+                        .weight(userRequestDTO.getWeight())
+                        .user(user).build();
+                user.setAdmin(admin);
+            }
+            case "ROLE_DOCTOR" -> {
+                Doctor doctor = Doctor.builder()
+                        .dob(userRequestDTO.getDob())
+                        .phoneNo(userRequestDTO.getPhoneNo())
+                        .bloodGroup(userRequestDTO.getBloodGroup())
+                        .height(userRequestDTO.getHeight())
+                        .weight(userRequestDTO.getWeight())
+                        .user(user).build();
+                user.setDoctor(doctor);
+            }
+            case "ROLE_PATIENT" -> {
+                Patient patient = Patient.builder()
+                        .dob(userRequestDTO.getDob())
+                        .phoneNo(userRequestDTO.getPhoneNo())
+                        .bloodGroup(userRequestDTO.getBloodGroup())
+                        .height(userRequestDTO.getHeight())
+                        .weight(userRequestDTO.getWeight())
+                        .user(user).build();
+                user.setPatient(patient);
+            }
+            case "ROLE_RECEPTIONIST" -> {
+                Receptionist receptionist = Receptionist.builder()
+                        .dob(userRequestDTO.getDob())
+                        .phoneNo(userRequestDTO.getPhoneNo())
+                        .bloodGroup(userRequestDTO.getBloodGroup())
+                        .height(userRequestDTO.getHeight())
+                        .weight(userRequestDTO.getWeight())
+                        .user(user).build();
+                user.setReceptionist(receptionist);
+            }
+            case "ROLE_PHLEBOTOMIST" -> {
+                Phlebotomist phlebotomist = Phlebotomist.builder()
+                        .dob(userRequestDTO.getDob())
+                        .phoneNo(userRequestDTO.getPhoneNo())
+                        .bloodGroup(userRequestDTO.getBloodGroup())
+                        .height(userRequestDTO.getHeight())
+                        .weight(userRequestDTO.getWeight())
+                        .user(user).build();
+                user.setPhlebotomist(phlebotomist);
+            }
+        }
         user = userService.save(user);
         return new UserResponseDTO(user);
     }

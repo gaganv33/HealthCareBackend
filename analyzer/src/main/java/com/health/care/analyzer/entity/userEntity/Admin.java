@@ -32,10 +32,6 @@ public class Admin {
     @Column(name = "weight", nullable = false)
     private Integer weight;
 
-    // need to change it to nullable = false
-    @Column(name = "dashboard_password", nullable = true)
-    private String dashboardPassword;
-
     @Id
     @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
