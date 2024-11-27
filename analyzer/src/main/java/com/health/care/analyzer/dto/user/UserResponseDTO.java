@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -19,7 +20,7 @@ public class UserResponseDTO {
     private String lastName;
     private String roles;
     private Boolean isEnabled;
-    private Date registeredDate;
+    private LocalDate registeredDate;
 
     public UserResponseDTO(User user) {
         this.username = user.getUsername();

@@ -1,9 +1,6 @@
 package com.health.care.analyzer.exceptionHandler;
 
-import com.health.care.analyzer.exception.InvalidRefreshTokenException;
-import com.health.care.analyzer.exception.InvalidRoleException;
-import com.health.care.analyzer.exception.UnauthorizedException;
-import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
+import com.health.care.analyzer.exception.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
@@ -122,6 +119,22 @@ public class ExcHandler {
     public ProblemDetail methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
         problemDetail.setTitle("Method Argument Type Mismatch");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(DoctorNotFoundException.class)
+    public ProblemDetail doctorNotFoundExceptionHandler(DoctorNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Doctor not found");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(InvalidAppointmentIdException.class)
+    public ProblemDetail invalidAppointmentIdExceptionHandler(InvalidAppointmentIdException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Invalid appointment");
         return problemDetail;
     }
 

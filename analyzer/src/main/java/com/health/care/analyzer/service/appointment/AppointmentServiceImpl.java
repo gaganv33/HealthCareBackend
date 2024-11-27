@@ -3,12 +3,14 @@ package com.health.care.analyzer.service.appointment;
 import com.health.care.analyzer.dao.appointment.AppointmentDAO;
 import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
+import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,5 +68,47 @@ public class AppointmentServiceImpl implements AppointmentService {
                     .doctorLastName(appointment.getDoctor().getUser().getLastName())
                     .build();
         }).toList();
+    }
+
+    @Override
+    public List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor) {
+        return appointmentDAO.getAllAppointmentUsingPatientAndDoctor(patient, doctor).stream().map(appointment -> {
+            return AppointmentResponseDTO.builder()
+                    .date(appointment.getDate())
+                    .stage(appointment.getStage())
+                    .time(appointment.getTime())
+                    .doctorLastName(appointment.getDoctor().getUser().getFirstName())
+                    .doctorLastName(appointment.getDoctor().getUser().getLastName())
+                    .build();
+        }).toList();
+    }
+
+    @Override
+    public List<AppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage) {
+        return appointmentDAO.getAllAppointmentUsingPatientDoctorAndStage(patient, doctor, stage).stream().map(appointment -> {
+            return AppointmentResponseDTO.builder()
+                    .date(appointment.getDate())
+                    .stage(appointment.getStage())
+                    .time(appointment.getTime())
+                    .doctorFirstName(appointment.getDoctor().getUser().getFirstName())
+                    .doctorLastName(appointment.getDoctor().getUser().getLastName())
+                    .build();
+        }).toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateFeedback(Long id, Feedback feedback) {
+        appointmentDAO.updateFeedback(id, feedback);
+    }
+
+    @Override
+    public Optional<Appointment> getById(Long id) {
+        return appointmentDAO.getById(id);
+    }
+
+    @Override
+    public Optional<Feedback> getAppointmentFeedbackById(Long id) {
+        return appointmentDAO.getAppointmentFeedbackById(id);
     }
 }

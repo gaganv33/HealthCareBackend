@@ -1,16 +1,21 @@
 package com.health.care.analyzer.controller.patient;
 
+import com.health.care.analyzer.dto.appointment.AppointmentFeedbackRequestDTO;
 import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.patient.BookAppointmentRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
+import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import com.health.care.analyzer.entity.userEntity.User;
+import com.health.care.analyzer.exception.DoctorNotFoundException;
+import com.health.care.analyzer.exception.InvalidAppointmentIdException;
 import com.health.care.analyzer.service.appointment.AppointmentService;
 import com.health.care.analyzer.service.auth.JwtService;
+import com.health.care.analyzer.service.feedback.FeedbackService;
 import com.health.care.analyzer.service.patient.PatientService;
 import com.health.care.analyzer.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +26,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/patient")
@@ -32,14 +40,16 @@ public class PatientController {
     private final UserService userService;
     private final PatientService patientService;
     private final AppointmentService appointmentService;
+    private final FeedbackService feedbackService;
 
     @Autowired
     public PatientController(JwtService jwtService, UserService userService, PatientService patientService,
-                             AppointmentService appointmentService) {
+                             AppointmentService appointmentService, FeedbackService feedbackService) {
         this.jwtService = jwtService;
         this.userService = userService;
         this.patientService = patientService;
         this.appointmentService = appointmentService;
+        this.feedbackService = feedbackService;
     }
 
     @GetMapping("/test")
@@ -116,18 +126,70 @@ public class PatientController {
     public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointment(
             @RequestParam(name = "stage", required = false) String stage,
             @RequestParam(name = "doctor", required = false) String doctorUsername,
-            @RequestParam(name = "date", required = false) Date date, HttpServletRequest httpServletRequest) {
+            HttpServletRequest httpServletRequest)
+            throws DoctorNotFoundException {
         String authorization = httpServletRequest.getHeader("Authorization");
         String token = authorization.substring(7);
         String patientUsername = jwtService.extractUsername(token);
         Patient patient = userService.findByUsername(patientUsername).getPatient();
 
-        List<AppointmentResponseDTO> appointments = appointmentService.getAllAppointmentUsingPatient(patient);
-
-        if(stage != null && doctorUsername == null && date == null) {
-            appointments = appointmentService.getAllAppointmentUsingPatientAndStage(patient, stage);
-        }
+        List<AppointmentResponseDTO> appointments = getAllAppointmentBasedOnStageDoctorUsernameAndDate(
+                patient, stage, doctorUsername);
 
         return new ResponseEntity<>(appointments, HttpStatus.OK);
+    }
+
+    private List<AppointmentResponseDTO> getAllAppointmentBasedOnStageDoctorUsernameAndDate(Patient patient,
+                                                                                            String stage,
+                                                                                            String doctorUsername)
+            throws DoctorNotFoundException {
+        if (stage != null && doctorUsername == null) {
+            return appointmentService.getAllAppointmentUsingPatientAndStage(patient, stage);
+        } else if(stage == null && doctorUsername != null) {
+            Doctor doctor = userService.findByUsername(doctorUsername).getDoctor();
+            if(doctor == null) {
+                throw new DoctorNotFoundException("Doctor with username " + doctorUsername + " not found");
+            }
+            return appointmentService.getAllAppointmentUsingPatientAndDoctor(patient, doctor);
+        } else if(stage != null) {
+            Doctor doctor = userService.findByUsername(doctorUsername).getDoctor();
+            if(doctor == null) {
+                throw new DoctorNotFoundException("Doctor with username " + doctorUsername + " not found");
+            }
+            return appointmentService.getAllAppointmentUsingPatientDoctorAndStage(patient, doctor, stage);
+        }
+        return appointmentService.getAllAppointmentUsingPatient(patient);
+    }
+
+    @PostMapping("/update/appointment/feedback/{id}")
+    public ResponseEntity<String> updateFeedback(@PathVariable(name = "id") Long id,
+                                                 @RequestBody AppointmentFeedbackRequestDTO feedbackRequestDTO)
+            throws InvalidAppointmentIdException {
+        Optional<Appointment> appointmentOptional = appointmentService.getById(id);
+        if(appointmentOptional.isEmpty()) {
+            throw new InvalidAppointmentIdException("Invalid appointment id");
+        }
+        Appointment appointment = appointmentOptional.get();
+        Feedback feedback = Feedback.builder().feedback(feedbackRequestDTO.getFeedback()).build();
+
+        if(appointment.getFeedback() == null) {
+            feedback = feedbackService.save(feedback);
+        } else {
+            Feedback feedbackAppointment = appointment.getFeedback();
+            feedbackAppointment.setFeedback(feedback.getFeedback());
+            feedback = feedbackService.update(feedbackAppointment);
+        }
+        appointmentService.updateFeedback(id, feedback);
+        return new ResponseEntity<>("Feedback updated", HttpStatus.OK);
+    }
+
+    @GetMapping("/appointment/feedback/{id}")
+    public ResponseEntity<Feedback> getAppointmentFeedbackById(@PathVariable(name = "id") Long id)
+            throws InvalidAppointmentIdException {
+        Optional<Feedback> feedbackOptional = appointmentService.getAppointmentFeedbackById(id);
+        if(feedbackOptional.isEmpty()) {
+            throw new InvalidAppointmentIdException("Invalid appointment id or no feedback for this appointment");
+        }
+        return new ResponseEntity<>(feedbackOptional.get(), HttpStatus.OK);
     }
 }

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -37,7 +38,7 @@ public class User {
     private Boolean isEnabled;
 
     @Column(name = "registered_date", nullable = false)
-    private Date registeredDate;
+    private LocalDate registeredDate;
 
     @JsonManagedReference
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

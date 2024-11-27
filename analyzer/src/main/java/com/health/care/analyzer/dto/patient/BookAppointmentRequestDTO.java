@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -20,7 +21,7 @@ public class BookAppointmentRequestDTO {
 
     @NotNull(message = "Date cannot be null")
     @FutureOrPresent(message = "Date must be today or in the future")
-    private Date date;
+    private LocalDate date;
 
     @NotBlank(message = "Doctor's username cannot be blank")
     private String doctorUsername;

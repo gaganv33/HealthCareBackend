@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -39,7 +40,7 @@ public class Appointment {
     private LocalTime time;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private LocalDate date;
 
     @ManyToOne(cascade = {
             CascadeType.DETACH,

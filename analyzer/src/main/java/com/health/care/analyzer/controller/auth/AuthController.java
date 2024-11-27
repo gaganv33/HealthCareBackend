@@ -26,6 +26,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -62,7 +63,7 @@ public class AuthController {
         }
         User user = new User(userRequestDTO);
         user.setIsEnabled(user.getRole().equals(UserRole.ADMIN) || user.getRole().equals(UserRole.PATIENT));
-        user.setRegisteredDate(new Date());
+        user.setRegisteredDate(LocalDate.now());
         switch (user.getRole()) {
             case UserRole.ADMIN -> {
                 Admin admin = Admin.builder()
