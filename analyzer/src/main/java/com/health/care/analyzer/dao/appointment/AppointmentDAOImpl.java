@@ -95,15 +95,16 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     }
 
     @Override
-    public Optional<Feedback> getAppointmentFeedbackById(Long id) {
+    public Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id) {
         TypedQuery<Appointment> query = entityManager.createQuery(
-                "from Appointment a JOIN FETCH a.feedback where a.id = :id",
+                "from Appointment a where a.patient = :patient and a.id = :id",
                 Appointment.class);
+        query.setParameter("patient", patient);
         query.setParameter("id", id);
         List<Appointment> appointmentList = query.getResultList();
         if(appointmentList.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(appointmentList.get(0).getFeedback());
+        return Optional.of(appointmentList.get(0));
     }
 }

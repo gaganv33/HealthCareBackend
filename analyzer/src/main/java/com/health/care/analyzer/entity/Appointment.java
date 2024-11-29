@@ -1,5 +1,7 @@
 package com.health.care.analyzer.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
@@ -42,6 +44,7 @@ public class Appointment {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
+    @JsonBackReference
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
@@ -51,6 +54,7 @@ public class Appointment {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
+    @JsonBackReference
     @ManyToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.PERSIST,
@@ -67,6 +71,7 @@ public class Appointment {
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Prescription prescription;
 
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "phlebotomist_test")
     private PhlebotomistTest phlebotomistTest;

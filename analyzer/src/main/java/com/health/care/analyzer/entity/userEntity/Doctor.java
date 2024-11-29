@@ -1,6 +1,7 @@
 package com.health.care.analyzer.entity.userEntity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Designation;
@@ -46,6 +47,7 @@ public class Doctor {
     @JoinColumn(name = "doctor_id")
     private List<Designation> designationList;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Appointment> appointmentList;
 

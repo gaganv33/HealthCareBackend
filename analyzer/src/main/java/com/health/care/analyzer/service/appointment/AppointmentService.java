@@ -18,5 +18,5 @@ public interface AppointmentService {
     List<AppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage);
     void updateFeedback(Long id, Feedback feedback);
     Optional<Appointment> getById(Long id);
-    Optional<Feedback> getAppointmentFeedbackById(Long id);
+    Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
 }

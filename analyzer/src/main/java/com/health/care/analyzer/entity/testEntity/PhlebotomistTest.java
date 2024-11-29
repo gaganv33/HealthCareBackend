@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.testEntity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.userEntity.Phlebotomist;
 import jakarta.persistence.*;
@@ -23,6 +24,7 @@ public class PhlebotomistTest {
     @Column(name = "id")
     private Long id;
 
+    @JsonBackReference
     @OneToOne(mappedBy = "phlebotomistTest", cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,

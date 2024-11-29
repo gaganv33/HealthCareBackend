@@ -17,5 +17,5 @@ public interface AppointmentDAO {
     List<Appointment> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor);
     List<Appointment> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage);
     void updateFeedback(Long id, Feedback feedback);
-    Optional<Feedback> getAppointmentFeedbackById(Long id);
+    Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
 }

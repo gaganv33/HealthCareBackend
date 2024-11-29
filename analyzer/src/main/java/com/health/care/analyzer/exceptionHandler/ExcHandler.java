@@ -138,6 +138,14 @@ public class ExcHandler {
         return problemDetail;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(FeedbackNotFoundException.class)
+    public ProblemDetail feedbackNotFoundExceptionHandler(FeedbackNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Feedback not found");
+        return problemDetail;
+    }
+
     @ExceptionHandler(Exception.class)
     public void exceptionHandler(Exception e) {
         System.out.println(e);

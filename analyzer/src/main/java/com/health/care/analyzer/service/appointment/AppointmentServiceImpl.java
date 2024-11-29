@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,54 +45,25 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<AppointmentResponseDTO> getAllAppointmentUsingPatient(Patient patient) {
-        return appointmentDAO.getAllAppointmentUsingPatient(patient).stream().map(appointment -> {
-            return AppointmentResponseDTO.builder()
-                    .date(appointment.getDate())
-                    .stage(appointment.getStage())
-                    .time(appointment.getTime())
-                    .doctorFirstName(appointment.getDoctor().getUser().getFirstName())
-                    .doctorLastName(appointment.getDoctor().getUser().getLastName())
-                    .build();
-        }).toList();
+        return appointmentDAO.getAllAppointmentUsingPatient(patient).stream().map(AppointmentResponseDTO::new).toList();
     }
 
     @Override
     public List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndStage(Patient patient, String stage) {
-        return appointmentDAO.getAllAppointmentUsingPatientAndStage(patient, stage).stream().map(appointment -> {
-            return AppointmentResponseDTO.builder()
-                    .date(appointment.getDate())
-                    .stage(appointment.getStage())
-                    .time(appointment.getTime())
-                    .doctorFirstName(appointment.getDoctor().getUser().getFirstName())
-                    .doctorLastName(appointment.getDoctor().getUser().getLastName())
-                    .build();
-        }).toList();
+        return appointmentDAO.getAllAppointmentUsingPatientAndStage(patient, stage).
+                stream().map(AppointmentResponseDTO::new).toList();
     }
 
     @Override
     public List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor) {
-        return appointmentDAO.getAllAppointmentUsingPatientAndDoctor(patient, doctor).stream().map(appointment -> {
-            return AppointmentResponseDTO.builder()
-                    .date(appointment.getDate())
-                    .stage(appointment.getStage())
-                    .time(appointment.getTime())
-                    .doctorLastName(appointment.getDoctor().getUser().getFirstName())
-                    .doctorLastName(appointment.getDoctor().getUser().getLastName())
-                    .build();
-        }).toList();
+        return appointmentDAO.getAllAppointmentUsingPatientAndDoctor(patient, doctor).
+                stream().map(AppointmentResponseDTO::new).toList();
     }
 
     @Override
     public List<AppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage) {
-        return appointmentDAO.getAllAppointmentUsingPatientDoctorAndStage(patient, doctor, stage).stream().map(appointment -> {
-            return AppointmentResponseDTO.builder()
-                    .date(appointment.getDate())
-                    .stage(appointment.getStage())
-                    .time(appointment.getTime())
-                    .doctorFirstName(appointment.getDoctor().getUser().getFirstName())
-                    .doctorLastName(appointment.getDoctor().getUser().getLastName())
-                    .build();
-        }).toList();
+        return appointmentDAO.getAllAppointmentUsingPatientDoctorAndStage(patient, doctor, stage).
+                stream().map(AppointmentResponseDTO::new).toList();
     }
 
     @Override
@@ -108,7 +78,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Optional<Feedback> getAppointmentFeedbackById(Long id) {
-        return appointmentDAO.getAppointmentFeedbackById(id);
+    public Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id) {
+        return appointmentDAO.getAppointmentUsingPatientAndId(patient, id);
     }
 }
