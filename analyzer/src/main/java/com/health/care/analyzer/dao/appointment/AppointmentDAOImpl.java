@@ -29,21 +29,8 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     }
 
     @Override
-    public Optional<Appointment> getById(long id) {
-        TypedQuery<Appointment> query = entityManager.createQuery(
-                "from Appointment a where a.id = :id", Appointment.class);
-        query.setParameter("id", id);
-        List<Appointment> appointmentList = query.getResultList();
-        if(appointmentList.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(appointmentList.get(0));
-    }
-
-    @Override
-    public void deleteById(long id) {
-        entityManager.createQuery("delete from Appointment a where a.id = :id")
-                .setParameter("id", id).executeUpdate();
+    public void deleteAppointment(Appointment appointment) {
+        entityManager.remove(appointment);
     }
 
     @Override

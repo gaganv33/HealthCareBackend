@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.medicineEntity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class MedicineVendor {
     @Column(name = "address", nullable = false)
     private String address;
 
+    @JsonManagedReference
     @ManyToMany(cascade = {
             CascadeType.DETACH,
             CascadeType.PERSIST,

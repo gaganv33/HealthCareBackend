@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -12,7 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileResponseDTO {
-    private Date dob;
+    private LocalDate dob;
     private String phoneNo;
     private String bloodGroup;
     private Integer weight;

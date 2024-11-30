@@ -18,13 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/doctor")
 @PreAuthorize("hasAuthority('ROLE_DOCTOR')")
 public class DoctorController {
-    private final JwtService jwtService;
     private final UserService userService;
     private final DoctorService doctorService;
 
     @Autowired
-    public DoctorController(JwtService jwtService, UserService userService, DoctorService doctorService) {
-        this.jwtService = jwtService;
+    public DoctorController(UserService userService, DoctorService doctorService) {
         this.userService = userService;
         this.doctorService = doctorService;
     }
@@ -38,11 +36,7 @@ public class DoctorController {
     public ResponseEntity<String> doctorProfile(@RequestBody @Valid ProfileRequestDTO profileRequestDTO,
                                                 HttpServletRequest httpServletRequest) {
         Doctor doctor = new Doctor(profileRequestDTO);
-
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String username = jwtService.extractUsername(token);
-        User user = userService.findByUsername(username);
+        User user = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"));
 
         doctor.setUser(user);
         doctorService.save(doctor);

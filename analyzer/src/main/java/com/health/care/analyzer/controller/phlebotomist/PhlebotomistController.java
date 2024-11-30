@@ -18,13 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/phlebotomist")
 @PreAuthorize("hasAuthority('ROLE_PHLEBOTOMIST')")
 public class PhlebotomistController {
-    private final JwtService jwtService;
     private final UserService userService;
     private final PhlebotomistService phlebotomistService;
 
     @Autowired
-    public PhlebotomistController(JwtService jwtService, UserService userService, PhlebotomistService phlebotomistService) {
-        this.jwtService = jwtService;
+    public PhlebotomistController(UserService userService, PhlebotomistService phlebotomistService) {
         this.userService = userService;
         this.phlebotomistService = phlebotomistService;
     }
@@ -38,11 +36,7 @@ public class PhlebotomistController {
     public ResponseEntity<String> phlebotomistProfile(@RequestBody @Valid ProfileRequestDTO profileRequestDTO,
                                                       HttpServletRequest httpServletRequest) {
         Phlebotomist phlebotomist = new Phlebotomist(profileRequestDTO);
-
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String username = jwtService.extractUsername(token);
-        User user = userService.findByUsername(username);
+        User user = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"));
 
         phlebotomist.setUser(user);
         phlebotomistService.save(phlebotomist);

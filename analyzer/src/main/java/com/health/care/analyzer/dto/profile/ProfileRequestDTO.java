@@ -3,6 +3,7 @@ package com.health.care.analyzer.dto.profile;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -13,7 +14,7 @@ public class ProfileRequestDTO {
 
     @NotNull(message = "Date of birth should not be null")
     @Past(message = "Date of birth must be in the past")
-    private Date dob;
+    private LocalDate dob;
 
     @NotBlank(message = "Phone number should not be blank")
     @Pattern(

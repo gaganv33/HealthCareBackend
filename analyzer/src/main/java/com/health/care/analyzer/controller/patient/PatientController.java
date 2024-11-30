@@ -5,18 +5,19 @@ import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.feedback.FeedbackResponseDTO;
 import com.health.care.analyzer.dto.patient.BookAppointmentRequestDTO;
+import com.health.care.analyzer.dto.phlebotomistTest.PhlebotomistTestResponseDTO;
+import com.health.care.analyzer.dto.prescription.PrescriptionResponseDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
+import com.health.care.analyzer.entity.Prescription;
+import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import com.health.care.analyzer.entity.userEntity.User;
-import com.health.care.analyzer.exception.DoctorNotFoundException;
-import com.health.care.analyzer.exception.FeedbackNotFoundException;
-import com.health.care.analyzer.exception.InvalidAppointmentIdException;
+import com.health.care.analyzer.exception.*;
 import com.health.care.analyzer.service.appointment.AppointmentService;
-import com.health.care.analyzer.service.auth.JwtService;
 import com.health.care.analyzer.service.feedback.FeedbackService;
 import com.health.care.analyzer.service.patient.PatientService;
 import com.health.care.analyzer.service.user.UserService;
@@ -35,16 +36,14 @@ import java.util.Optional;
 @RequestMapping("/patient")
 @PreAuthorize("hasAuthority('ROLE_PATIENT')")
 public class PatientController {
-    private final JwtService jwtService;
     private final UserService userService;
     private final PatientService patientService;
     private final AppointmentService appointmentService;
     private final FeedbackService feedbackService;
 
     @Autowired
-    public PatientController(JwtService jwtService, UserService userService, PatientService patientService,
+    public PatientController(UserService userService, PatientService patientService,
                              AppointmentService appointmentService, FeedbackService feedbackService) {
-        this.jwtService = jwtService;
         this.userService = userService;
         this.patientService = patientService;
         this.appointmentService = appointmentService;
@@ -60,11 +59,7 @@ public class PatientController {
     public ResponseEntity<String> patientProfile(@RequestBody @Valid ProfileRequestDTO profileRequestDTO,
                                                  HttpServletRequest httpServletRequest) {
         Patient patient = new Patient(profileRequestDTO);
-
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String username = jwtService.extractUsername(token);
-        User user = userService.findByUsername(username);
+        User user = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"));
 
         patient.setUser(user);
         patientService.save(patient);
@@ -74,11 +69,7 @@ public class PatientController {
 
     @GetMapping("/profile")
     public ResponseEntity<ProfileResponseDTO> getPatientProfile(HttpServletRequest httpServletRequest) {
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String username = jwtService.extractUsername(token);
-        User user = userService.findByUsername(username);
-
+        User user = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"));
         return new ResponseEntity<>(patientService.getPatientProfile(user), HttpStatus.OK);
     }
 
@@ -94,13 +85,16 @@ public class PatientController {
 
     @PostMapping("/book/appointment")
     public ResponseEntity<String> bookAppointment(@RequestBody @Valid BookAppointmentRequestDTO bookAppointmentRequestDTO,
-                                                  HttpServletRequest httpServletRequest) {
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String patientUsername = jwtService.extractUsername(token);
+                                                  HttpServletRequest httpServletRequest) throws DoctorNotFoundException {
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
+        User userDoctor = userService.findByUsername(bookAppointmentRequestDTO.getDoctorUsername());
+        Doctor doctor = userDoctor.getDoctor();
 
-        Patient patient = userService.findByUsername(patientUsername).getPatient();
-        Doctor doctor = userService.findByUsername(bookAppointmentRequestDTO.getDoctorUsername()).getDoctor();
+        if(doctor == null || !userDoctor.getIsEnabled()) {
+            throw new DoctorNotFoundException("Doctor not found or doctor is not enabled");
+        }
+
         Appointment appointment = Appointment.builder()
                 .stage("doctor")
                 .time(bookAppointmentRequestDTO.getTime())
@@ -116,8 +110,12 @@ public class PatientController {
     }
 
     @DeleteMapping("/delete/appointment/{id}")
-    public ResponseEntity<String> deleteAppointmentById(@PathVariable("id") long id) {
-        appointmentService.deleteById(id);
+    public ResponseEntity<String> deleteAppointmentById(@PathVariable("id") long id,
+                                                        HttpServletRequest httpServletRequest)
+            throws InvalidAppointmentIdException {
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
+        appointmentService.deleteAppointmentByPatientAndId(patient, id);
         return new ResponseEntity<> ("Appointment deleted", HttpStatus.OK);
     }
 
@@ -127,10 +125,8 @@ public class PatientController {
             @RequestParam(name = "doctor", required = false) String doctorUsername,
             HttpServletRequest httpServletRequest)
             throws DoctorNotFoundException {
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String patientUsername = jwtService.extractUsername(token);
-        Patient patient = userService.findByUsername(patientUsername).getPatient();
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
 
         List<AppointmentResponseDTO> appointments = getAllAppointmentBasedOnStageDoctorUsernameAndDate(
                 patient, stage, doctorUsername);
@@ -165,10 +161,8 @@ public class PatientController {
                                                  @RequestBody AppointmentFeedbackRequestDTO feedbackRequestDTO,
                                                  HttpServletRequest httpServletRequest)
             throws InvalidAppointmentIdException {
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String patientUsername = jwtService.extractUsername(token);
-        Patient patient = userService.findByUsername(patientUsername).getPatient();
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
 
         Optional<Appointment> appointmentOptional = appointmentService.getAppointmentUsingPatientAndId(patient, id);
         if(appointmentOptional.isEmpty()) {
@@ -191,10 +185,8 @@ public class PatientController {
     public ResponseEntity<FeedbackResponseDTO> getAppointmentFeedbackById(@PathVariable(name = "id") Long id,
                                                                           HttpServletRequest httpServletRequest)
             throws InvalidAppointmentIdException, FeedbackNotFoundException {
-        String authorization = httpServletRequest.getHeader("Authorization");
-        String token = authorization.substring(7);
-        String patientUsername = jwtService.extractUsername(token);
-        Patient patient = userService.findByUsername(patientUsername).getPatient();
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
 
         Optional<Appointment> appointmentOptional = appointmentService.getAppointmentUsingPatientAndId(patient, id);
         if(appointmentOptional.isEmpty()) {
@@ -205,5 +197,41 @@ public class PatientController {
             throw new FeedbackNotFoundException("Feedback not found");
         }
         return new ResponseEntity<>(new FeedbackResponseDTO(feedback), HttpStatus.OK);
+    }
+
+    @GetMapping("/appointment/prescription/{id}")
+    public ResponseEntity<PrescriptionResponseDTO> getAppointmentPrescriptionById(@PathVariable(name = "id") Long id,
+                                                                                  HttpServletRequest httpServletRequest)
+            throws InvalidAppointmentIdException, PrescriptionNotFoundException {
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
+
+        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentUsingPatientAndId(patient, id);
+        if(appointmentOptional.isEmpty()) {
+            throw new InvalidAppointmentIdException("Invalid appointment id");
+        }
+        Prescription prescription = appointmentOptional.get().getPrescription();
+        if(prescription == null) {
+            throw new PrescriptionNotFoundException("Prescription not found");
+        }
+        return new ResponseEntity<>(new PrescriptionResponseDTO(prescription), HttpStatus.OK);
+    }
+
+    @GetMapping("/appointment/phlebotomist/test/{id}")
+    public ResponseEntity<PhlebotomistTestResponseDTO> getAppointmentPhlebotomistTestById(
+            @PathVariable(name = "id") Long id, HttpServletRequest httpServletRequest)
+            throws InvalidAppointmentIdException, PhlebotomistNotFoundException {
+        Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
+                .getPatient();
+
+        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentUsingPatientAndId(patient, id);
+        if(appointmentOptional.isEmpty()) {
+            throw new InvalidAppointmentIdException("Invalid appointment id");
+        }
+        PhlebotomistTest phlebotomistTest = appointmentOptional.get().getPhlebotomistTest();
+        if(phlebotomistTest == null) {
+            throw new PhlebotomistNotFoundException("Phlebotomist test details not found");
+        }
+        return new ResponseEntity<>(new PhlebotomistTestResponseDTO(phlebotomistTest), HttpStatus.OK);
     }
 }

@@ -33,55 +33,24 @@ public class PhlebotomistTest {
     }, fetch = FetchType.EAGER)
     private Appointment appointment;
 
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH
+    @OneToMany(mappedBy = "phlebotomistTest", cascade = {
+        CascadeType.DETACH,
+        CascadeType.MERGE,
+        CascadeType.PERSIST,
+        CascadeType.REFRESH
     }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "phlebotomist_test_phlebotomist",
-            joinColumns = @JoinColumn(name = "phlebotomist_test_id"),
-            inverseJoinColumns = @JoinColumn(name = "phlebotomist_id")
-    )
-    private List<Phlebotomist> phlebotomistList;
+    private List<LabTestReport> labTestReportList;
 
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "phlebotomist_test_lab_test",
-            joinColumns = @JoinColumn(name = "phlebotomist_test_id"),
-            inverseJoinColumns = @JoinColumn(name = "lab_test_id")
-    )
-    private List<LabTest> labTestList;
-
-    public void addPhlebotomist(Phlebotomist phlebotomist) {
-        if(phlebotomistList == null) {
-            phlebotomistList = new ArrayList<>();
+    public void addLabTestReport(LabTestReport labTestReport) {
+        if(labTestReportList == null) {
+            labTestReportList = new ArrayList<>();
         }
-        phlebotomistList.add(phlebotomist);
+        labTestReportList.add(labTestReport);
     }
 
-    public void removePhlebotomist(Phlebotomist phlebotomist) {
-        if(phlebotomistList != null) {
-            phlebotomistList.remove(phlebotomist);
-        }
-    }
-
-    public void addLabTest(LabTest labTest) {
-        if(labTestList == null) {
-            labTestList = new ArrayList<>();
-        }
-        labTestList.add(labTest);
-    }
-
-    public void removeLabTest(LabTest labTest) {
-        if(labTestList != null) {
-            labTestList.remove(labTest);
+    public void removeLabTestReport(LabTestReport labTestReport) {
+        if(labTestReportList != null) {
+            labTestReportList.remove(labTestReport);
         }
     }
 }

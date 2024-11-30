@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,7 +19,7 @@ import java.util.Date;
 @Table(name = "admin")
 public class Admin {
     @Column(name = "dob", nullable = false)
-    private Date dob;
+    private LocalDate dob;
 
     @Column(name = "phone_no", nullable = false)
     private String phoneNo;
@@ -34,7 +35,7 @@ public class Admin {
 
     @Id
     @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 

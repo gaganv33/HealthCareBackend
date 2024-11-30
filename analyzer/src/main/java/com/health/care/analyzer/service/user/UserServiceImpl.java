@@ -5,6 +5,7 @@ import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
+import com.health.care.analyzer.service.auth.JwtService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,11 +20,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserDAO userDAO;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Autowired
-    public UserServiceImpl(UserDAO userDAO, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDAO userDAO, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.userDAO = userDAO;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -161,5 +164,12 @@ public class UserServiceImpl implements UserService {
                 .username(doctor.getUsername())
                 .firstName(doctor.getFirstName())
                 .lastName(doctor.getLastName()).build()).toList();
+    }
+
+    @Override
+    public User getUserUsingAuthorizationHeader(String authorization) {
+        String token = authorization.substring(7);
+        String username = jwtService.extractUsername(token);
+        return findByUsername(username);
     }
 }

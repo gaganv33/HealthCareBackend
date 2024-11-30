@@ -10,8 +10,7 @@ import java.util.Optional;
 
 public interface AppointmentDAO {
     Appointment save(Appointment appointment);
-    Optional<Appointment> getById(long id);
-    void deleteById(long id);
+    void deleteAppointment(Appointment appointment);
     List<Appointment> getAllAppointmentUsingPatient(Patient patient);
     List<Appointment> getAllAppointmentUsingPatientAndStage(Patient patient, String stage);
     List<Appointment> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor);

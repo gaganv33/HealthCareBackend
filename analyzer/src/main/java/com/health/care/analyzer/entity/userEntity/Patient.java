@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
 @Table(name = "patient")
 public class Patient {
     @Column(name = "dob", nullable = false)
-    private Date dob;
+    private LocalDate dob;
 
     @Column(name = "phone_no", nullable = false)
     private String phoneNo;
@@ -38,12 +39,12 @@ public class Patient {
 
     @Id
     @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Appointment> appointmentList;
 
     public void addAppointment(Appointment appointment) {

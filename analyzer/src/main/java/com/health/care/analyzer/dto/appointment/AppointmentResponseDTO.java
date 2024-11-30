@@ -20,6 +20,7 @@ public class AppointmentResponseDTO {
     private LocalTime time;
     private String doctorFirstName;
     private String doctorLastName;
+    private String doctorUsername;
 
     public AppointmentResponseDTO(Appointment appointment) {
         this.id = appointment.getId();
@@ -28,5 +29,6 @@ public class AppointmentResponseDTO {
         this.time = appointment.getTime();
         this.doctorFirstName = appointment.getDoctor().getUser().getFirstName();
         this.doctorLastName = appointment.getDoctor().getUser().getLastName();
+        this.doctorUsername = appointment.getDoctor().getUser().getUsername();
     }
 }

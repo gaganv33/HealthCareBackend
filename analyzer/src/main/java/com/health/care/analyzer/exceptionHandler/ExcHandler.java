@@ -146,6 +146,22 @@ public class ExcHandler {
         return problemDetail;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(PrescriptionNotFoundException.class)
+    public ProblemDetail prescriptionNotFoundExceptionHandler(PrescriptionNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Prescription not found");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(PhlebotomistNotFoundException.class)
+    public ProblemDetail phlebotomistNotFoundExceptionHandler(PhlebotomistNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Phlebotomist test details not found");
+        return problemDetail;
+    }
+
     @ExceptionHandler(Exception.class)
     public void exceptionHandler(Exception e) {
         System.out.println(e);

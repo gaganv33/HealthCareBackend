@@ -6,6 +6,7 @@ import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
+import com.health.care.analyzer.exception.InvalidAppointmentIdException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,17 +31,17 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
-    public void deleteById(long id) {
-        Optional<Appointment> appointmentOptional = appointmentDAO.getById(id);
+    public void deleteAppointmentByPatientAndId(Patient patient, long id) throws InvalidAppointmentIdException {
+        Optional<Appointment> appointmentOptional = appointmentDAO.getAppointmentUsingPatientAndId(patient, id);
         if(appointmentOptional.isEmpty()) {
-            return;
+            throw new InvalidAppointmentIdException("Invalid appointment id");
         }
         Appointment appointment = appointmentOptional.get();
-        Doctor doctor = appointment.getDoctor();
-        Patient patient = appointment.getPatient();
-        doctor.removeAppointment(appointment);
-        patient.removeAppointment(appointment);
-        appointmentDAO.deleteById(id);
+        Doctor appointmentDoctor = appointment.getDoctor();
+        Patient appointmentPatient = appointment.getPatient();
+        appointmentDoctor.removeAppointment(appointment);
+        appointmentPatient.removeAppointment(appointment);
+        appointmentDAO.deleteAppointment(appointment);
     }
 
     @Override
@@ -70,11 +71,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     public void updateFeedback(Long id, Feedback feedback) {
         appointmentDAO.updateFeedback(id, feedback);
-    }
-
-    @Override
-    public Optional<Appointment> getById(Long id) {
-        return appointmentDAO.getById(id);
     }
 
     @Override

@@ -32,4 +32,5 @@ public interface UserService {
     void disableUser(String username);
     List<String> getEnabledDoctorUsername();
     List<UserProfileResponseDTO> getEnabledDoctorProfile();
+    User getUserUsingAuthorizationHeader(String authorization);
 }

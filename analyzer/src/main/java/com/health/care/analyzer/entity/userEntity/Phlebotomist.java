@@ -2,6 +2,7 @@ package com.health.care.analyzer.entity.userEntity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
+import com.health.care.analyzer.entity.testEntity.LabTestReport;
 import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.List;
 @Table(name = "phlebotomist")
 public class Phlebotomist {
     @Column(name = "dob", nullable = false)
-    private Date dob;
+    private LocalDate dob;
 
     @Column(name = "phone_no", nullable = false)
     private String phoneNo;
@@ -37,33 +39,28 @@ public class Phlebotomist {
 
     @Id
     @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = {
+    @OneToMany(mappedBy = "phlebotomist", cascade = {
             CascadeType.DETACH,
-            CascadeType.PERSIST,
             CascadeType.MERGE,
+            CascadeType.PERSIST,
             CascadeType.REFRESH
     }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "phlebotomist_test_phlebotomist",
-            joinColumns = @JoinColumn(name = "phlebotomist_id"),
-            inverseJoinColumns = @JoinColumn(name = "phlebotomist_test_id")
-    )
-    private List<PhlebotomistTest> phlebotomistTestList;
+    private List<LabTestReport> labTestReportList;
 
-    public void addPhlebotomistTest(PhlebotomistTest phlebotomistTest) {
-        if(phlebotomistTestList == null) {
-            phlebotomistTestList = new ArrayList<>();
+    public void addLabTestReport(LabTestReport labTestReport) {
+        if(labTestReportList == null) {
+            labTestReportList = new ArrayList<>();
         }
-        phlebotomistTestList.add(phlebotomistTest);
+        labTestReportList.add(labTestReport);
     }
 
-    public void removePhlebotomistTest(PhlebotomistTest phlebotomistTest) {
-        if(phlebotomistTestList != null) {
-            phlebotomistTestList.remove(phlebotomistTest);
+    public void removeLabTestReport(LabTestReport labTestReport) {
+        if(labTestReportList != null) {
+            labTestReportList.remove(labTestReport);
         }
     }
 

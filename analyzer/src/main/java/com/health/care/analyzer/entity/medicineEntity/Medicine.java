@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity.medicineEntity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.entity.Prescription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -27,21 +29,9 @@ public class Medicine {
     private String serialNo;
 
     @Column(name = "expiry_date", nullable = false)
-    private Date expiryDate;
+    private LocalDate expiryDate;
 
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.PERSIST,
-            CascadeType.MERGE,
-            CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "prescription_medicine",
-            joinColumns = @JoinColumn(name = "medicine_id"),
-            inverseJoinColumns = @JoinColumn(name = "prescription_id")
-    )
-    private List<Prescription> prescriptionList;
-
+    @JsonBackReference
     @ManyToMany(cascade = {
             CascadeType.DETACH,
             CascadeType.PERSIST,
@@ -54,19 +44,6 @@ public class Medicine {
             inverseJoinColumns = @JoinColumn(name = "medicine_vendor_id")
     )
     private List<MedicineVendor> vendorList;
-
-    public void addPrescription(Prescription prescription) {
-        if(prescriptionList == null) {
-            prescriptionList = new ArrayList<>();
-        }
-        prescriptionList.add(prescription);
-    }
-
-    public void removePrescription(Prescription prescription) {
-        if(prescriptionList != null) {
-            prescriptionList.remove(prescription);
-        }
-    }
 
     public void addMedicineVendor(MedicineVendor vendor) {
         if(vendorList == null) {
