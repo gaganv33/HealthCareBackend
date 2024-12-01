@@ -37,13 +37,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/test", "/auth/register", "/auth/login",
-                                "/auth/refresh").permitAll()
+                                "/auth/refresh", "/auth/register/vendor").permitAll()
                         .requestMatchers("/auth/**").authenticated()
                         .requestMatchers("/doctor/**").authenticated()
                         .requestMatchers("/admin/**").authenticated()
                         .requestMatchers("/patient/**").authenticated()
                         .requestMatchers("/phlebotomist/**").authenticated()
-                        .requestMatchers("/receptionist/**").authenticated())
+                        .requestMatchers("/receptionist/**").authenticated()
+                        .requestMatchers("/medicine/vendor/**").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

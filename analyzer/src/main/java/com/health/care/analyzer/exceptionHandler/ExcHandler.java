@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -159,6 +160,22 @@ public class ExcHandler {
     public ProblemDetail phlebotomistNotFoundExceptionHandler(PhlebotomistNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setTitle("Phlebotomist test details not found");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MedicineVendorNotFoundException.class)
+    public ProblemDetail medicineVendorNotFoundExceptionHandler(MedicineVendorNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Medicine vendor not found");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @ExceptionHandler(LockedException.class)
+    public ProblemDetail lockedExceptionHandler(LockedException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, e.getMessage());
+        problemDetail.setTitle("Locked");
         return problemDetail;
     }
 

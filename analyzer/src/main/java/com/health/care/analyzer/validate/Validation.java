@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class Validation {
     public boolean isRoleValid(String role) {
         return role.equals(UserRole.ADMIN) || role.equals(UserRole.PATIENT) || role.equals(UserRole.DOCTOR) ||
-                role.equals(UserRole.RECEPTIONIST) || role.equals(UserRole.PHLEBOTOMIST);
+                role.equals(UserRole.RECEPTIONIST) || role.equals(UserRole.PHLEBOTOMIST)
+                || role.equals(UserRole.MEDICINE_VENDOR);
     }
 }

@@ -80,6 +80,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserResponseDTO> getAllMedicineVendor() {
+        return userDAO.getAllMedicineVendor().stream().map(UserResponseDTO::new).toList();
+    }
+
+    @Override
     public List<UserResponseDTO> getEnabledUser() {
         return userDAO.getEnabledUser().stream().map(UserResponseDTO::new).toList();
     }
@@ -137,6 +142,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDTO> getAllDisabledPhlebotomist() {
         return userDAO.getAllDisabledPhlebotomist().stream().map(UserResponseDTO::new).toList();
+    }
+
+    @Override
+    public List<UserResponseDTO> getAllEnabledMedicineVendor() {
+        return userDAO.getAllEnabledMedicineVendor().stream().map(UserResponseDTO::new).toList();
+    }
+
+    @Override
+    public List<UserResponseDTO> getAllDisabledMedicineVendor() {
+        return userDAO.getAllDisabledMedicineVendor().stream().map(UserResponseDTO::new).toList();
     }
 
     @Override

@@ -84,6 +84,7 @@ public class AdminController {
             case UserRole.PATIENT -> userService.getAllPatient();
             case UserRole.PHLEBOTOMIST -> userService.getAllPhlebotomist();
             case UserRole.RECEPTIONIST -> userService.getAllReceptionist();
+            case UserRole.MEDICINE_VENDOR -> userService.getAllMedicineVendor();
             default -> userService.getAllUser();
         };
     }
@@ -99,6 +100,7 @@ public class AdminController {
             case UserRole.PATIENT -> userService.getAllEnabledPatient();
             case UserRole.PHLEBOTOMIST -> userService.getAllEnabledPhlebotomist();
             case UserRole.RECEPTIONIST -> userService.getAllEnabledReceptionist();
+            case UserRole.MEDICINE_VENDOR -> userService.getAllEnabledMedicineVendor();
             default -> userService.getAllUser();
         };
     }
@@ -110,6 +112,7 @@ public class AdminController {
             case UserRole.PATIENT -> userService.getAllDisabledPatient();
             case UserRole.PHLEBOTOMIST -> userService.getAllDisabledPhlebotomist();
             case UserRole.RECEPTIONIST -> userService.getAllDisabledReceptionist();
+            case UserRole.MEDICINE_VENDOR -> userService.getAllDisabledMedicineVendor();
             default -> userService.getAllUser();
         };
     }

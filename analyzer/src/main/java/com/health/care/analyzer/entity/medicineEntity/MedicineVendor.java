@@ -1,6 +1,8 @@
 package com.health.care.analyzer.entity.medicineEntity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.health.care.analyzer.entity.userEntity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +20,10 @@ import java.util.List;
 @Table(name = "medicine_vendor")
 public class MedicineVendor {
     @Id
-    @Column(name = "name", nullable = false)
-    private String name;
+    @JsonBackReference
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "address", nullable = false)
     private String address;

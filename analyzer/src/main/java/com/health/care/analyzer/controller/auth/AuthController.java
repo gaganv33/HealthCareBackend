@@ -3,10 +3,12 @@ package com.health.care.analyzer.controller.auth;
 import com.health.care.analyzer.data.UserRole;
 import com.health.care.analyzer.dto.auth.AuthRequestDTO;
 import com.health.care.analyzer.dto.auth.JwtResponse;
+import com.health.care.analyzer.dto.auth.MedicineVendorRegisterRequestDTO;
 import com.health.care.analyzer.dto.auth.RefreshTokenRequestDTO;
 import com.health.care.analyzer.dto.user.UserRequestDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.RefreshToken;
+import com.health.care.analyzer.entity.medicineEntity.MedicineVendor;
 import com.health.care.analyzer.entity.userEntity.*;
 import com.health.care.analyzer.exception.InvalidRefreshTokenException;
 import com.health.care.analyzer.exception.InvalidRoleException;
@@ -56,7 +58,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserResponseDTO register(@RequestBody @Valid UserRequestDTO userRequestDTO)
+    public ResponseEntity<String> register(@RequestBody @Valid UserRequestDTO userRequestDTO)
             throws UsernameAlreadyTakenException, InvalidRoleException {
         if(!validation.isRoleValid(userRequestDTO.getRole())) {
             throw new InvalidRoleException("Invalid role");
@@ -117,7 +119,29 @@ public class AuthController {
             }
         }
         user = userService.save(user);
-        return new UserResponseDTO(user);
+        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/register/vendor")
+    public ResponseEntity<String> registerVendor(
+            @RequestBody @Valid MedicineVendorRegisterRequestDTO medicineVendorRegisterRequestDTO)
+            throws InvalidRoleException, UsernameAlreadyTakenException {
+        if(!validation.isRoleValid(medicineVendorRegisterRequestDTO.getRole())) {
+            throw new InvalidRoleException("Invalid role");
+        }
+        User user = new User(medicineVendorRegisterRequestDTO);
+        user.setIsEnabled(false);
+        user.setRegisteredDate(LocalDate.now());
+
+        MedicineVendor medicineVendor = MedicineVendor.builder()
+                .user(user)
+                .address(medicineVendorRegisterRequestDTO.getAddress())
+                .build();
+        user.setMedicineVendor(medicineVendor);
+
+        user = userService.save(user);
+
+        return new ResponseEntity<>("Vendor registered successfully", HttpStatus.OK);
     }
 
     @PostMapping("/login")

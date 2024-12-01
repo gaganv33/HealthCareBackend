@@ -1,6 +1,7 @@
 package com.health.care.analyzer.entity.medicineEntity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.health.care.analyzer.dto.medicineVendor.AddMedicineRequestDTO;
 import com.health.care.analyzer.entity.Prescription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,9 @@ import java.util.*;
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "medicine")
+@Table(name = "medicine", uniqueConstraints = {
+        @UniqueConstraint(name = "medicine_id", columnNames = {"name", "expiryDate", "serialNo"})
+})
 public class Medicine {
     @Id
     @Column(name = "name", nullable = false)
@@ -56,5 +59,19 @@ public class Medicine {
         if(vendorList != null) {
             vendorList.remove(vendor);
         }
+    }
+
+    public boolean isContainsMedicineVendor(MedicineVendor medicineVendor) {
+        if(vendorList != null) {
+            return vendorList.contains(medicineVendor);
+        }
+        return false;
+    }
+
+    public Medicine(AddMedicineRequestDTO addMedicineRequestDTO) {
+        this.name = addMedicineRequestDTO.getName();
+        this.quantity = addMedicineRequestDTO.getQuantity();
+        this.serialNo = addMedicineRequestDTO.getSerialNo();
+        this.expiryDate = addMedicineRequestDTO.getExpiryDate();
     }
 }

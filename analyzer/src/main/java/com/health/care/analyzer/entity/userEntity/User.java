@@ -1,7 +1,9 @@
 package com.health.care.analyzer.entity.userEntity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.health.care.analyzer.dto.auth.MedicineVendorRegisterRequestDTO;
 import com.health.care.analyzer.dto.user.UserRequestDTO;
+import com.health.care.analyzer.entity.medicineEntity.MedicineVendor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,11 +62,23 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Doctor doctor;
 
+    @JsonManagedReference
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private MedicineVendor medicineVendor;
+
     public User(UserRequestDTO userRequestDTO) {
         this.username = userRequestDTO.getUsername();
         this.firstName = userRequestDTO.getFirstName();
         this.lastName = userRequestDTO.getLastName();
         this.password = userRequestDTO.getPassword();
         this.role = userRequestDTO.getRole();
+    }
+
+    public User(MedicineVendorRegisterRequestDTO medicineVendorRegisterRequestDTO) {
+        this.username = medicineVendorRegisterRequestDTO.getUsername();
+        this.firstName = medicineVendorRegisterRequestDTO.getFirstName();
+        this.lastName = medicineVendorRegisterRequestDTO.getLastName();
+        this.password = medicineVendorRegisterRequestDTO.getPassword();
+        this.role = medicineVendorRegisterRequestDTO.getRole();
     }
 }

@@ -14,6 +14,7 @@ public interface UserDAO {
     List<User> getAllPatient();
     List<User> getAllReceptionist();
     List<User> getAllPhlebotomist();
+    List<User> getAllMedicineVendor();
     List<User> getEnabledUser();
     List<User> getDisabledUser();
     List<User> getAllEnabledAdmin();
@@ -26,6 +27,8 @@ public interface UserDAO {
     List<User> getAllDisabledReceptionist();
     List<User> getAllEnabledPhlebotomist();
     List<User> getAllDisabledPhlebotomist();
+    List<User> getAllEnabledMedicineVendor();
+    List<User> getAllDisabledMedicineVendor();
     void enableUser(String username);
     void disableUser(String username);
 }

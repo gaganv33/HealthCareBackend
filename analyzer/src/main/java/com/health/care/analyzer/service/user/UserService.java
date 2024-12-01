@@ -16,6 +16,7 @@ public interface UserService {
     List<UserResponseDTO> getAllPatient();
     List<UserResponseDTO> getAllReceptionist();
     List<UserResponseDTO> getAllPhlebotomist();
+    List<UserResponseDTO> getAllMedicineVendor();
     List<UserResponseDTO> getEnabledUser();
     List<UserResponseDTO> getDisabledUser();
     List<UserResponseDTO> getAllEnabledAdmin();
@@ -28,6 +29,8 @@ public interface UserService {
     List<UserResponseDTO> getAllDisabledReceptionist();
     List<UserResponseDTO> getAllEnabledPhlebotomist();
     List<UserResponseDTO> getAllDisabledPhlebotomist();
+    List<UserResponseDTO> getAllEnabledMedicineVendor();
+    List<UserResponseDTO> getAllDisabledMedicineVendor();
     void enableUser(String username);
     void disableUser(String username);
     List<String> getEnabledDoctorUsername();
