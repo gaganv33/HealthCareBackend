@@ -1,5 +1,6 @@
 package com.health.care.analyzer.entity;
 
+import com.health.care.analyzer.dto.doctor.designation.DesignationRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,13 +15,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "designation")
 public class Designation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
     @Column(name = "qualification", nullable = false)
     private String qualification;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Column(name = "college_name", nullable = false)
+    private String collegeName;
+
+    public Designation(DesignationRequestDTO designationRequestDTO) {
+        this.qualification = designationRequestDTO.getQualification();
+        this.collegeName = designationRequestDTO.getCollegeName();
+    }
 }

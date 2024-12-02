@@ -26,6 +26,12 @@ public class DoctorDAOImpl implements DoctorDAO {
     }
 
     @Override
+    public Doctor merge(Doctor doctor) {
+        doctor = entityManager.merge(doctor);
+        return doctor;
+    }
+
+    @Override
     public Optional<Doctor> findByUser(User user) {
         TypedQuery<Doctor> query = entityManager.createQuery("from Doctor d where d.user = :user",
                 Doctor.class);
@@ -49,5 +55,16 @@ public class DoctorDAOImpl implements DoctorDAO {
                         .setParameter("bloodGroup", doctor.getBloodGroup())
                         .setParameter("user", doctor.getUser())
                         .executeUpdate();
+    }
+
+    @Override
+    public Doctor getDoctorProfile(User user) {
+        TypedQuery<Doctor> query = entityManager.createQuery("from Doctor d where d.user = :user", Doctor.class);
+        query.setParameter("user", user);
+        List<Doctor> doctorList = query.getResultList();
+        if(doctorList.isEmpty()) {
+            return new Doctor();
+        }
+        return doctorList.get(0);
     }
 }

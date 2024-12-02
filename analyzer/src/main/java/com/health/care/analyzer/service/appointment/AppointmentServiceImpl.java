@@ -77,4 +77,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id) {
         return appointmentDAO.getAppointmentUsingPatientAndId(patient, id);
     }
+
+    @Override
+    public List<AppointmentResponseDTO> getAllAppointmentUsingDoctor(Doctor doctor) {
+        return appointmentDAO.getAllAppointmentUsingDoctor(doctor).stream().map(AppointmentResponseDTO::new).toList();
+    }
 }

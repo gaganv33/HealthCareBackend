@@ -94,4 +94,12 @@ public class AppointmentDAOImpl implements AppointmentDAO {
         }
         return Optional.of(appointmentList.get(0));
     }
+
+    @Override
+    public List<Appointment> getAllAppointmentUsingDoctor(Doctor doctor) {
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment a where a.doctor = :doctor",
+                Appointment.class);
+        query.setParameter("doctor", doctor);
+        return query.getResultList();
+    }
 }

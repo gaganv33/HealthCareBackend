@@ -72,6 +72,15 @@ public class Doctor {
         }
     }
 
+    public boolean isContainsDesignation(String qualification) {
+        for(Designation designation : designationList) {
+            if(designation.getQualification().equals(qualification)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Doctor(ProfileRequestDTO profileRequestDTO) {
         this.dob = profileRequestDTO.getDob();
         this.phoneNo = profileRequestDTO.getPhoneNo();
