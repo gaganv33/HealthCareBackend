@@ -46,4 +46,12 @@ public class MedicineDAOImpl implements MedicineDAO {
         medicine = entityManager.merge(medicine);
         return medicine;
     }
+
+    @Override
+    public List<Medicine> findBySerialNo(String serialNo) {
+        TypedQuery<Medicine> query = entityManager.createQuery("from Medicine m where m.serialNo = :serialNo",
+                Medicine.class);
+        query.setParameter("serialNo", serialNo);
+        return query.getResultList();
+    }
 }

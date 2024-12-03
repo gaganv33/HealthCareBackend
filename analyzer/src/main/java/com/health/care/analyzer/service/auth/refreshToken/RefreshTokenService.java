@@ -1,7 +1,7 @@
 package com.health.care.analyzer.service.auth.refreshToken;
 
 import com.health.care.analyzer.entity.RefreshToken;
-import com.health.care.analyzer.exception.InvalidRefreshTokenException;
+import com.health.care.analyzer.exception.authentication.InvalidRefreshTokenException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;

@@ -22,13 +22,16 @@ import java.util.*;
 })
 public class Medicine {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "serial_no", nullable = false)
+    @Column(name = "serial_no", nullable = false, unique = true)
     private String serialNo;
 
     @Column(name = "expiry_date", nullable = false)

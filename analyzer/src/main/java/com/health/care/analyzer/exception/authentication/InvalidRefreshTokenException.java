@@ -1,4 +1,4 @@
-package com.health.care.analyzer.exception;
+package com.health.care.analyzer.exception.authentication;
 
 public class InvalidRefreshTokenException extends Exception {
     public InvalidRefreshTokenException() {

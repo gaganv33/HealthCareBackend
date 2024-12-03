@@ -3,7 +3,7 @@ package com.health.care.analyzer.service.user;
 import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.userEntity.User;
-import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
+import com.health.care.analyzer.exception.authentication.UsernameAlreadyTakenException;
 
 import java.util.List;
 

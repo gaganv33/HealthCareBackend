@@ -1,6 +1,14 @@
 package com.health.care.analyzer.exceptionHandler;
 
 import com.health.care.analyzer.exception.*;
+import com.health.care.analyzer.exception.appointment.FeedbackNotFoundException;
+import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
+import com.health.care.analyzer.exception.authentication.InvalidRefreshTokenException;
+import com.health.care.analyzer.exception.authentication.InvalidRoleException;
+import com.health.care.analyzer.exception.authentication.UnauthorizedException;
+import com.health.care.analyzer.exception.authentication.UsernameAlreadyTakenException;
+import com.health.care.analyzer.exception.medicine.InvalidSerialNoException;
+import com.health.care.analyzer.exception.medicine.MedicineVendorNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.http.HttpStatus;
@@ -176,6 +184,14 @@ public class ExcHandler {
     public ProblemDetail lockedExceptionHandler(LockedException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.LOCKED, e.getMessage());
         problemDetail.setTitle("Locked");
+        return problemDetail;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidSerialNoException.class)
+    public ProblemDetail invalidSerialNoExceptionHandler(InvalidSerialNoException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
         return problemDetail;
     }
 

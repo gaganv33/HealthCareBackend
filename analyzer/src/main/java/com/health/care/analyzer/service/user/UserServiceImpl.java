@@ -4,7 +4,7 @@ import com.health.care.analyzer.dao.user.UserDAO;
 import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.userEntity.User;
-import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
+import com.health.care.analyzer.exception.authentication.UsernameAlreadyTakenException;
 import com.health.care.analyzer.service.auth.JwtService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

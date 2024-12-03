@@ -5,7 +5,8 @@ import com.health.care.analyzer.dto.medicineVendor.MedicineVendorAddressRequestD
 import com.health.care.analyzer.entity.medicineEntity.Medicine;
 import com.health.care.analyzer.entity.medicineEntity.MedicineVendor;
 import com.health.care.analyzer.entity.userEntity.User;
-import com.health.care.analyzer.exception.MedicineVendorNotFoundException;
+import com.health.care.analyzer.exception.medicine.InvalidSerialNoException;
+import com.health.care.analyzer.exception.medicine.MedicineVendorNotFoundException;
 import com.health.care.analyzer.service.medicine.MedicineService;
 import com.health.care.analyzer.service.medicineVendor.MedicineVendorService;
 import com.health.care.analyzer.service.user.UserService;
@@ -56,12 +57,15 @@ public class MedicineVendorController {
 
     @PostMapping("/add/medicine")
     public ResponseEntity<String> addMedicine(@RequestBody @Valid AddMedicineRequestDTO addMedicineRequestDTO,
-                                              HttpServletRequest httpServletRequest) {
+                                              HttpServletRequest httpServletRequest) throws InvalidSerialNoException {
         MedicineVendor medicineVendor = userService.
                 getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getMedicineVendor();
         Optional<Medicine> medicineOptional = medicineService.findMedicineByNameSerialNoExpiryDate(
                 addMedicineRequestDTO.getName(), addMedicineRequestDTO.getSerialNo(), addMedicineRequestDTO.getExpiryDate());
         if(medicineOptional.isEmpty()) {
+            if(!medicineService.findBySerialNo(addMedicineRequestDTO.getSerialNo()).isEmpty()) {
+                throw new InvalidSerialNoException("Duplicate serial no");
+            }
             Medicine medicine = new Medicine(addMedicineRequestDTO);
             medicine.addMedicineVendor(medicineVendor);
             medicine = medicineService.save(medicine);

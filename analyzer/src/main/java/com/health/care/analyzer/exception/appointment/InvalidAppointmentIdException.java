@@ -1,4 +1,4 @@
-package com.health.care.analyzer.exception;
+package com.health.care.analyzer.exception.appointment;
 
 public class InvalidAppointmentIdException extends Exception {
     public InvalidAppointmentIdException() {

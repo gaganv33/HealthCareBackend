@@ -3,6 +3,7 @@ package com.health.care.analyzer.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.health.care.analyzer.entity.medicineEntity.Medicine;
+import com.health.care.analyzer.entity.medicineEntity.MedicineRecord;
 import com.health.care.analyzer.entity.userEntity.Receptionist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -45,29 +46,69 @@ public class Prescription {
     @JoinColumn(name = "receptionist_id")
     private Receptionist receptionist;
 
-    @ManyToMany(cascade = {
+    @OneToMany(cascade = {
             CascadeType.DETACH,
-            CascadeType.PERSIST,
             CascadeType.MERGE,
+            CascadeType.PERSIST,
             CascadeType.REFRESH
     }, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "prescription_medicine",
-            joinColumns = @JoinColumn(name = "prescription_id"),
-            inverseJoinColumns = @JoinColumn(name = "medicine_id")
-    )
-    private List<Medicine> medicineList;
+    @JoinColumn(name = "required_medicine")
+    private List<MedicineRecord> requiredMedicineList;
 
-    public void addMedicine(Medicine medicine) {
-        if(medicineList == null) {
-            medicineList = new ArrayList<>();
+    @OneToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    }, fetch = FetchType.LAZY)
+    @JoinColumn(name = "available_medicine")
+    private List<MedicineRecord> availableMedicineList;
+
+    @OneToMany(cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    }, fetch = FetchType.LAZY)
+    @JoinColumn(name = "pending_medicine")
+    private List<MedicineRecord> pendingMedicineList;
+
+    public void addMedicineToRequiredMedicineList(MedicineRecord medicineRecord) {
+        if(requiredMedicineList == null) {
+            requiredMedicineList = new ArrayList<>();
         }
-        medicineList.add(medicine);
+        requiredMedicineList.add(medicineRecord);
     }
 
-    public void removeMedicine(Medicine medicine) {
-        if(medicineList != null) {
-            medicineList.remove(medicine);
+    public void removeMedicineFromRequiredMedicineList(MedicineRecord medicineRecord) {
+        if(requiredMedicineList != null) {
+            requiredMedicineList.remove(medicineRecord);
+        }
+    }
+
+    public void addMedicineToAvailableMedicineList(MedicineRecord medicineRecord) {
+        if(availableMedicineList == null) {
+            availableMedicineList = new ArrayList<>();
+        }
+        availableMedicineList.add(medicineRecord);
+    }
+
+    public void removeMedicineFromAvailableMedicineList(MedicineRecord medicineRecord) {
+        if(availableMedicineList != null) {
+            availableMedicineList.remove(medicineRecord);
+        }
+    }
+
+    public void addMedicineToPendingMedicineList(MedicineRecord medicineRecord) {
+        if(pendingMedicineList == null) {
+            pendingMedicineList = new ArrayList<>();
+        }
+        pendingMedicineList.add(medicineRecord);
+    }
+
+    public void removeMedicineFromPendingMedicineList(MedicineRecord medicineRecord) {
+        if(pendingMedicineList != null) {
+            pendingMedicineList.remove(medicineRecord);
         }
     }
 }

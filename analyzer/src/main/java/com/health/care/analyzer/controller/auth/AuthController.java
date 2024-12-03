@@ -6,14 +6,13 @@ import com.health.care.analyzer.dto.auth.JwtResponse;
 import com.health.care.analyzer.dto.auth.MedicineVendorRegisterRequestDTO;
 import com.health.care.analyzer.dto.auth.RefreshTokenRequestDTO;
 import com.health.care.analyzer.dto.user.UserRequestDTO;
-import com.health.care.analyzer.dto.user.UserResponseDTO;
 import com.health.care.analyzer.entity.RefreshToken;
 import com.health.care.analyzer.entity.medicineEntity.MedicineVendor;
 import com.health.care.analyzer.entity.userEntity.*;
-import com.health.care.analyzer.exception.InvalidRefreshTokenException;
-import com.health.care.analyzer.exception.InvalidRoleException;
-import com.health.care.analyzer.exception.UnauthorizedException;
-import com.health.care.analyzer.exception.UsernameAlreadyTakenException;
+import com.health.care.analyzer.exception.authentication.InvalidRefreshTokenException;
+import com.health.care.analyzer.exception.authentication.InvalidRoleException;
+import com.health.care.analyzer.exception.authentication.UnauthorizedException;
+import com.health.care.analyzer.exception.authentication.UsernameAlreadyTakenException;
 import com.health.care.analyzer.service.auth.JwtService;
 import com.health.care.analyzer.service.auth.refreshToken.RefreshTokenService;
 import com.health.care.analyzer.service.user.UserService;
@@ -29,7 +28,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 @RestController

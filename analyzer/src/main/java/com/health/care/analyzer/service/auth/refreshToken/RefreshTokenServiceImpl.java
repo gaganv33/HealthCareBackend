@@ -4,7 +4,7 @@ import com.health.care.analyzer.dao.auth.refreshToken.RefreshTokenDAO;
 import com.health.care.analyzer.dao.user.UserDAO;
 import com.health.care.analyzer.entity.RefreshToken;
 import com.health.care.analyzer.entity.userEntity.User;
-import com.health.care.analyzer.exception.InvalidRefreshTokenException;
+import com.health.care.analyzer.exception.authentication.InvalidRefreshTokenException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

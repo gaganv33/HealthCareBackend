@@ -17,6 +17,8 @@ import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.*;
+import com.health.care.analyzer.exception.appointment.FeedbackNotFoundException;
+import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
 import com.health.care.analyzer.service.appointment.AppointmentService;
 import com.health.care.analyzer.service.feedback.FeedbackService;
 import com.health.care.analyzer.service.patient.PatientService;

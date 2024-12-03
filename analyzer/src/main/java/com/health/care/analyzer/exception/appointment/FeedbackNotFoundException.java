@@ -1,4 +1,4 @@
-package com.health.care.analyzer.exception;
+package com.health.care.analyzer.exception.appointment;
 
 public class FeedbackNotFoundException extends Exception {
     public FeedbackNotFoundException() {

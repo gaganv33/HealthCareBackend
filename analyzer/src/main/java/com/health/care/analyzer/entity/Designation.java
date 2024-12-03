@@ -15,6 +15,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "designation")
 public class Designation {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "qualification", nullable = false)
     private String qualification;
 

@@ -5,7 +5,7 @@ import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
-import com.health.care.analyzer.exception.InvalidAppointmentIdException;
+import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
 
 import java.util.List;
 import java.util.Optional;

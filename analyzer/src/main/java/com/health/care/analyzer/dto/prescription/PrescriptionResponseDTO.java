@@ -17,6 +17,6 @@ public class PrescriptionResponseDTO {
     private List<MedicineResponseDTO> medicineList;
 
     public PrescriptionResponseDTO(Prescription prescription) {
-        this.medicineList = prescription.getMedicineList().stream().map(MedicineResponseDTO::new).toList();
+        this.medicineList = prescription.getRequiredMedicineList().stream().map(MedicineResponseDTO::new).toList();
     }
 }

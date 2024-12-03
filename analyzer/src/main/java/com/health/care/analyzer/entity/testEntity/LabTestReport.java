@@ -15,10 +15,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "lab_test")
 public class LabTestReport {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "name")
     private String name;
 
-    @Column(name = "result", nullable = false)
+    @Column(name = "result")
     private String result;
 
     @ManyToOne(cascade = {

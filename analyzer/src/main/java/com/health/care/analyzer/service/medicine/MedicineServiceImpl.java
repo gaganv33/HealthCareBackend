@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,5 +34,10 @@ public class MedicineServiceImpl implements MedicineService {
     @Transactional
     public Medicine merge(Medicine medicine) {
         return medicineDAO.merge(medicine);
+    }
+
+    @Override
+    public List<Medicine> findBySerialNo(String serialNo) {
+        return medicineDAO.findBySerialNo(serialNo);
     }
 }

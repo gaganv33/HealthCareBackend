@@ -1,4 +1,4 @@
-package com.health.care.analyzer.exception;
+package com.health.care.analyzer.exception.medicine;
 
 public class MedicineVendorNotFoundException extends Exception {
     public MedicineVendorNotFoundException() {

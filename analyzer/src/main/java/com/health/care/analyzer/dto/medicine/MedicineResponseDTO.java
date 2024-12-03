@@ -1,10 +1,12 @@
 package com.health.care.analyzer.dto.medicine;
 
 import com.health.care.analyzer.entity.medicineEntity.Medicine;
+import com.health.care.analyzer.entity.medicineEntity.MedicineRecord;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
@@ -15,13 +17,10 @@ import java.time.LocalDate;
 public class MedicineResponseDTO {
     private String name;
     private Integer quantity;
-    private String serialNo;
     private LocalDate expiryDate;
 
-    public MedicineResponseDTO(Medicine medicine) {
-        this.name = medicine.getName();
-        this.quantity = medicine.getQuantity();
-        this.serialNo = medicine.getSerialNo();
-        this.expiryDate = medicine.getExpiryDate();
+    public MedicineResponseDTO(MedicineRecord medicineRecord) {
+        this.name = medicineRecord.getName();
+        this.quantity = medicineRecord.getQuantity();
     }
 }
