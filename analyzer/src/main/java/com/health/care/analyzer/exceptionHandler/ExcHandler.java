@@ -195,6 +195,15 @@ public class ExcHandler {
         return problemDetail;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidOperationException.class)
+    public ProblemDetail invalidOperationExceptionHandler(InvalidOperationException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
+        return problemDetail;
+    }
+
+
     @ExceptionHandler(Exception.class)
     public void exceptionHandler(Exception e) {
         System.out.println(e);

@@ -2,7 +2,6 @@ package com.health.care.analyzer.entity.medicineEntity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.dto.medicineVendor.AddMedicineRequestDTO;
-import com.health.care.analyzer.entity.Prescription;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

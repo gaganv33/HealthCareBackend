@@ -31,6 +31,12 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     @Transactional
+    public void merge(Appointment appointment) {
+        appointmentDAO.merge(appointment);
+    }
+
+    @Override
+    @Transactional
     public void deleteAppointmentByPatientAndId(Patient patient, long id) throws InvalidAppointmentIdException {
         Optional<Appointment> appointmentOptional = appointmentDAO.getAppointmentUsingPatientAndId(patient, id);
         if(appointmentOptional.isEmpty()) {
@@ -79,7 +85,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponseDTO> getAllAppointmentUsingDoctor(Doctor doctor) {
-        return appointmentDAO.getAllAppointmentUsingDoctor(doctor).stream().map(AppointmentResponseDTO::new).toList();
+    public List<AppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor) {
+        return appointmentDAO.getAllAppointmentUsingDoctorAndStage(doctor).stream().map(AppointmentResponseDTO::new).toList();
+    }
+
+    @Override
+    public Optional<Appointment> getAppointmentById(Long id) {
+        return appointmentDAO.getAppointmentById(id);
     }
 }

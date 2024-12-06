@@ -1,8 +1,7 @@
 package com.health.care.analyzer.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.health.care.analyzer.entity.medicineEntity.Medicine;
+import com.health.care.analyzer.entity.medicineEntity.AvailableMedicineRecord;
 import com.health.care.analyzer.entity.medicineEntity.MedicineRecord;
 import com.health.care.analyzer.entity.userEntity.Receptionist;
 import jakarta.persistence.*;
@@ -46,30 +45,15 @@ public class Prescription {
     @JoinColumn(name = "receptionist_id")
     private Receptionist receptionist;
 
-    @OneToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "required_medicine")
     private List<MedicineRecord> requiredMedicineList;
 
-    @OneToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "available_medicine")
-    private List<MedicineRecord> availableMedicineList;
+    private List<AvailableMedicineRecord> availableMedicineList;
 
-    @OneToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "pending_medicine")
     private List<MedicineRecord> pendingMedicineList;
 
@@ -86,14 +70,14 @@ public class Prescription {
         }
     }
 
-    public void addMedicineToAvailableMedicineList(MedicineRecord medicineRecord) {
+    public void addMedicineToAvailableMedicineList(AvailableMedicineRecord medicineRecord) {
         if(availableMedicineList == null) {
             availableMedicineList = new ArrayList<>();
         }
         availableMedicineList.add(medicineRecord);
     }
 
-    public void removeMedicineFromAvailableMedicineList(MedicineRecord medicineRecord) {
+    public void removeMedicineFromAvailableMedicineList(AvailableMedicineRecord medicineRecord) {
         if(availableMedicineList != null) {
             availableMedicineList.remove(medicineRecord);
         }

@@ -1,19 +1,20 @@
 package com.health.care.analyzer.entity.medicineEntity;
 
-import com.health.care.analyzer.dto.prescription.MedicineRecordResponseDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "medicine_record")
-public class MedicineRecord {
+@Table(name = "available_medicine_record")
+public class AvailableMedicineRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,8 +25,9 @@ public class MedicineRecord {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    public MedicineRecord(MedicineRecordResponseDTO medicineRecordResponseDTO) {
-        this.name = medicineRecordResponseDTO.getName();
-        this.quantity = medicineRecordResponseDTO.getQuantity();
-    }
+    @Column(name = "serial_no", nullable = false)
+    private String serialNo;
+
+    @Column(name = "expiry_date", nullable = false)
+    private LocalDate expiryDate;
 }

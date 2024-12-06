@@ -18,10 +18,10 @@ public class LabTestReport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "result")
+    @Column(name = "result", nullable = true)
     private String result;
 
     @ManyToOne(cascade = {

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface AppointmentDAO {
     Appointment save(Appointment appointment);
+    void merge(Appointment appointment);
     void deleteAppointment(Appointment appointment);
     List<Appointment> getAllAppointmentUsingPatient(Patient patient);
     List<Appointment> getAllAppointmentUsingPatientAndStage(Patient patient, String stage);
@@ -17,5 +18,6 @@ public interface AppointmentDAO {
     List<Appointment> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage);
     void updateFeedback(Long id, Feedback feedback);
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
-    List<Appointment> getAllAppointmentUsingDoctor(Doctor doctor);
+    List<Appointment> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
+    Optional<Appointment> getAppointmentById(Long id);
 }

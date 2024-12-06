@@ -33,12 +33,7 @@ public class PhlebotomistTest {
     }, fetch = FetchType.EAGER)
     private Appointment appointment;
 
-    @OneToMany(mappedBy = "phlebotomistTest", cascade = {
-        CascadeType.DETACH,
-        CascadeType.MERGE,
-        CascadeType.PERSIST,
-        CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "phlebotomistTest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<LabTestReport> labTestReportList;
 
     public void addLabTestReport(LabTestReport labTestReport) {

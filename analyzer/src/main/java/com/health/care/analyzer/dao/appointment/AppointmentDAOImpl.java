@@ -29,6 +29,11 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     }
 
     @Override
+    public void merge(Appointment appointment) {
+        appointment = entityManager.merge(appointment);
+    }
+
+    @Override
     public void deleteAppointment(Appointment appointment) {
         entityManager.remove(appointment);
     }
@@ -96,10 +101,25 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     }
 
     @Override
-    public List<Appointment> getAllAppointmentUsingDoctor(Doctor doctor) {
-        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment a where a.doctor = :doctor",
+    public List<Appointment> getAllAppointmentUsingDoctorAndStage(Doctor doctor) {
+        TypedQuery<Appointment> query = entityManager.createQuery(
+                "from Appointment a where a.doctor = :doctor and a.stage = :stage",
                 Appointment.class);
         query.setParameter("doctor", doctor);
+        query.setParameter("stage", "doctor");
         return query.getResultList();
+    }
+
+    @Override
+    public Optional<Appointment> getAppointmentById(Long id) {
+        TypedQuery<Appointment> query = entityManager.createQuery(
+                "from Appointment a where a.id = :id",
+                Appointment.class);
+        query.setParameter("id", id);
+        List<Appointment> appointmentList = query.getResultList();
+        if(appointmentList.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(appointmentList.get(0));
     }
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface AppointmentService {
     Appointment save(Appointment appointment);
+    void merge(Appointment appointment);
     void deleteAppointmentByPatientAndId(Patient patient, long id) throws InvalidAppointmentIdException;
     List<AppointmentResponseDTO> getAllAppointmentUsingPatient(Patient patient);
     List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndStage(Patient patient, String stage);
@@ -19,5 +20,6 @@ public interface AppointmentService {
     List<AppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage);
     void updateFeedback(Long id, Feedback feedback);
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
-    List<AppointmentResponseDTO> getAllAppointmentUsingDoctor(Doctor doctor);
+    List<AppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
+    Optional<Appointment> getAppointmentById(Long id);
 }
