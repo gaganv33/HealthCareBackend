@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicineResponseDTO {
+public class MedicineRecordResponseDTO {
+    private Long id;
     private String name;
     private Integer quantity;
 
-    public MedicineResponseDTO(MedicineRecord medicineRecord) {
+    public MedicineRecordResponseDTO(MedicineRecord medicineRecord) {
+        this.id = medicineRecord.getId();
         this.name = medicineRecord.getName();
         this.quantity = medicineRecord.getQuantity();
     }

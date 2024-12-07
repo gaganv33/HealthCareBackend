@@ -4,7 +4,8 @@ import com.health.care.analyzer.dao.appointment.StageUpdateRequestDTO;
 import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationRequestDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationResponseDTO;
-import com.health.care.analyzer.dto.prescription.MedicineRecordResponseDTO;
+import com.health.care.analyzer.dto.medicine.MedicineRecordRequestDTO;
+import com.health.care.analyzer.dto.prescription.PrescriptionResponseDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
@@ -14,6 +15,7 @@ import com.health.care.analyzer.entity.medicineEntity.MedicineRecord;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.InvalidOperationException;
+import com.health.care.analyzer.exception.PrescriptionNotFoundException;
 import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
 import com.health.care.analyzer.service.appointment.AppointmentService;
 import com.health.care.analyzer.service.doctor.DoctorService;
@@ -92,7 +94,7 @@ public class DoctorController {
     }
 
     @GetMapping("/all/appointment")
-    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointment(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointmentUsingDoctorAndDoctorStage(HttpServletRequest httpServletRequest) {
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         return new ResponseEntity<>(appointmentService.getAllAppointmentUsingDoctorAndStage(doctor), HttpStatus.OK);
     }
@@ -102,20 +104,14 @@ public class DoctorController {
             @RequestBody @Valid StageUpdateRequestDTO stageUpdateRequestDTO,
             HttpServletRequest httpServletRequest)
             throws InvalidAppointmentIdException, InvalidOperationException {
-        Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
-        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
-        if(appointmentOptional.isEmpty()) {
-            throw new InvalidAppointmentIdException("Invalid appointment id");
-        }
-        Appointment appointment = appointmentOptional.get();
-        if(!appointment.getDoctor().getUser().getUsername().equals(doctor.getUser().getUsername())) {
-            throw new InvalidOperationException("Doctor cannot access this appointment");
-        }
-        if(!appointment.getStage().equals("doctor")) {
-            throw new InvalidOperationException("Cannot change stage if appointment is not in doctor");
-        }
         if(!validation.isValidStageUpdateInDoctor(stageUpdateRequestDTO)) {
             throw new InvalidOperationException("Invalid stage value");
+        }
+        Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
+        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
+        Appointment appointment = getAppointmentWithDoctorCheck(appointmentOptional, doctor);
+        if(!appointment.getStage().equals("doctor")) {
+            throw new InvalidOperationException("Cannot change stage if appointment is not in doctor");
         }
         appointment.setStage(stageUpdateRequestDTO.getStage());
         appointmentService.merge(appointment);
@@ -133,19 +129,13 @@ public class DoctorController {
 
     @PutMapping("/appointment/prescription/{id}")
     public ResponseEntity<String> addMedicine(@PathVariable(name = "id") Long id,
-                                              @RequestBody @Valid MedicineRecordResponseDTO medicineRecordResponseDTO,
+                                              @RequestBody @Valid MedicineRecordRequestDTO medicineRecordRequestDTO,
                                               HttpServletRequest httpServletRequest)
             throws InvalidAppointmentIdException, InvalidOperationException {
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
-        if(appointmentOptional.isEmpty()) {
-            throw new InvalidAppointmentIdException("Invalid appointment id");
-        }
-        Appointment appointment = appointmentOptional.get();
-        if(!appointment.getDoctor().getUser().getUsername().equals(doctor.getUser().getUsername())) {
-            throw new InvalidOperationException("Doctor cannot access this appointment");
-        }
-        MedicineRecord medicineRecord = new MedicineRecord(medicineRecordResponseDTO);
+        Appointment appointment = getAppointmentWithDoctorCheck(appointmentOptional, doctor);
+        MedicineRecord medicineRecord = new MedicineRecord(medicineRecordRequestDTO);
         if(appointment.getPrescription() != null) {
             appointment.getPrescription().addMedicineToRequiredMedicineList(medicineRecord);
         } else {
@@ -158,5 +148,31 @@ public class DoctorController {
         appointmentService.merge(appointment);
 
         return new ResponseEntity<>("Medicine added to the prescription", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/appointment/prescription/{id}")
+    public ResponseEntity<PrescriptionResponseDTO> getPrescriptionUsingAppointmentIdAndDoctor(
+            @PathVariable(name = "id") Long id, HttpServletRequest httpServletRequest)
+            throws InvalidAppointmentIdException, PrescriptionNotFoundException, InvalidOperationException {
+        Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
+        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
+        Appointment appointment = getAppointmentWithDoctorCheck(appointmentOptional, doctor);
+        if(appointment.getPrescription() == null) {
+            throw new PrescriptionNotFoundException("Prescription not found for this appointment");
+        }
+        PrescriptionResponseDTO prescriptionResponseDTO = new PrescriptionResponseDTO(appointment.getPrescription());
+        return new ResponseEntity<>(prescriptionResponseDTO, HttpStatus.OK);
+    }
+
+    private final Appointment getAppointmentWithDoctorCheck(Optional<Appointment> appointmentOptional, Doctor doctor)
+            throws InvalidAppointmentIdException, InvalidOperationException {
+        if(appointmentOptional.isEmpty()) {
+            throw new InvalidAppointmentIdException("Invalid appointment id");
+        }
+        Appointment appointment = appointmentOptional.get();
+        if(!appointment.getDoctor().getUser().getUsername().equals(doctor.getUser().getUsername())) {
+            throw new InvalidOperationException("Doctor cannot access this appointment");
+        }
+        return appointment;
     }
 }

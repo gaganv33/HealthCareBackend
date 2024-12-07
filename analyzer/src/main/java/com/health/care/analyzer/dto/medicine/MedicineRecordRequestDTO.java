@@ -1,4 +1,4 @@
-package com.health.care.analyzer.dto.prescription;
+package com.health.care.analyzer.dto.medicine;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MedicineRecordResponseDTO {
+public class MedicineRecordRequestDTO {
     @NotBlank(message = "name should not be blank")
     private String name;
 

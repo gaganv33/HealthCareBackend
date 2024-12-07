@@ -1,6 +1,6 @@
 package com.health.care.analyzer.entity.medicineEntity;
 
-import com.health.care.analyzer.dto.prescription.MedicineRecordResponseDTO;
+import com.health.care.analyzer.dto.medicine.MedicineRecordRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +24,8 @@ public class MedicineRecord {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    public MedicineRecord(MedicineRecordResponseDTO medicineRecordResponseDTO) {
-        this.name = medicineRecordResponseDTO.getName();
-        this.quantity = medicineRecordResponseDTO.getQuantity();
+    public MedicineRecord(MedicineRecordRequestDTO medicineRecordRequestDTO) {
+        this.name = medicineRecordRequestDTO.getName();
+        this.quantity = medicineRecordRequestDTO.getQuantity();
     }
 }
