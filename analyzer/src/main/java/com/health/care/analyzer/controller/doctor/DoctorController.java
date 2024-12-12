@@ -4,7 +4,10 @@ import com.health.care.analyzer.dao.appointment.StageUpdateRequestDTO;
 import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationRequestDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationResponseDTO;
+import com.health.care.analyzer.dto.labTestReport.LabTestReportDTO;
+import com.health.care.analyzer.dto.labTestReport.LabTestRequestDTO;
 import com.health.care.analyzer.dto.medicine.MedicineRecordRequestDTO;
+import com.health.care.analyzer.dto.phlebotomistTest.PhlebotomistTestResponseDTO;
 import com.health.care.analyzer.dto.prescription.PrescriptionResponseDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
@@ -12,15 +15,19 @@ import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Designation;
 import com.health.care.analyzer.entity.Prescription;
 import com.health.care.analyzer.entity.medicineEntity.MedicineRecord;
+import com.health.care.analyzer.entity.testEntity.LabTestReport;
+import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.InvalidOperationException;
+import com.health.care.analyzer.exception.PhlebotomistTestResultNotFoundException;
 import com.health.care.analyzer.exception.PrescriptionNotFoundException;
 import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
 import com.health.care.analyzer.service.appointment.AppointmentService;
 import com.health.care.analyzer.service.doctor.DoctorService;
 import com.health.care.analyzer.service.user.UserService;
-import com.health.care.analyzer.validate.Validation;
+import com.health.care.analyzer.utils.NotificationHelper;
+import com.health.care.analyzer.utils.ValidationHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +46,17 @@ public class DoctorController {
     private final UserService userService;
     private final DoctorService doctorService;
     private final AppointmentService appointmentService;
-    private final Validation validation;
+    private final ValidationHelper validationHelper;
+    private final NotificationHelper notificationHelper;
 
     @Autowired
     public DoctorController(UserService userService, DoctorService doctorService, AppointmentService appointmentService,
-                            Validation validation) {
+                            ValidationHelper validationHelper, NotificationHelper notificationHelper) {
         this.userService = userService;
         this.doctorService = doctorService;
         this.appointmentService = appointmentService;
-        this.validation = validation;
+        this.validationHelper = validationHelper;
+        this.notificationHelper = notificationHelper;
     }
 
     @GetMapping("/test")
@@ -104,27 +113,17 @@ public class DoctorController {
             @RequestBody @Valid StageUpdateRequestDTO stageUpdateRequestDTO,
             HttpServletRequest httpServletRequest)
             throws InvalidAppointmentIdException, InvalidOperationException {
-        if(!validation.isValidStageUpdateInDoctor(stageUpdateRequestDTO)) {
+        if(!validationHelper.isValidStageUpdateInDoctor(stageUpdateRequestDTO)) {
             throw new InvalidOperationException("Invalid stage value");
         }
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
-        Appointment appointment = getAppointmentWithDoctorCheck(appointmentOptional, doctor);
-        if(!appointment.getStage().equals("doctor")) {
-            throw new InvalidOperationException("Cannot change stage if appointment is not in doctor");
-        }
+
+        Appointment appointment = validationHelper.getAppointmentAfterChecks(appointmentOptional, doctor);
+
         appointment.setStage(stageUpdateRequestDTO.getStage());
         appointmentService.merge(appointment);
-        return new ResponseEntity<>(getStageUpdateMessage(stageUpdateRequestDTO), HttpStatus.OK);
-    }
-
-    private String getStageUpdateMessage(StageUpdateRequestDTO stageUpdateRequestDTO) throws InvalidOperationException {
-        return switch (stageUpdateRequestDTO.getStage()) {
-            case "receptionist" -> "Appointment transferred to receptionist";
-            case "phlebotomist" -> "Appointment transferred to phlebotomist";
-            case "completed" -> "Appointment completed";
-            default -> throw new InvalidOperationException("Invalid stage");
-        };
+        return new ResponseEntity<>(notificationHelper.getStageUpdateMessage(stageUpdateRequestDTO), HttpStatus.OK);
     }
 
     @PutMapping("/appointment/prescription/{id}")
@@ -134,7 +133,9 @@ public class DoctorController {
             throws InvalidAppointmentIdException, InvalidOperationException {
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
-        Appointment appointment = getAppointmentWithDoctorCheck(appointmentOptional, doctor);
+
+        Appointment appointment = validationHelper.getAppointmentAfterChecks(appointmentOptional, doctor);
+
         MedicineRecord medicineRecord = new MedicineRecord(medicineRecordRequestDTO);
         if(appointment.getPrescription() != null) {
             appointment.getPrescription().addMedicineToRequiredMedicineList(medicineRecord);
@@ -156,7 +157,9 @@ public class DoctorController {
             throws InvalidAppointmentIdException, PrescriptionNotFoundException, InvalidOperationException {
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
-        Appointment appointment = getAppointmentWithDoctorCheck(appointmentOptional, doctor);
+
+        Appointment appointment = validationHelper.getAppointmentAfterChecks(appointmentOptional, doctor);
+
         if(appointment.getPrescription() == null) {
             throw new PrescriptionNotFoundException("Prescription not found for this appointment");
         }
@@ -164,15 +167,39 @@ public class DoctorController {
         return new ResponseEntity<>(prescriptionResponseDTO, HttpStatus.OK);
     }
 
-    private final Appointment getAppointmentWithDoctorCheck(Optional<Appointment> appointmentOptional, Doctor doctor)
+    @PutMapping("/appointment/phlebotomist/test/{id}")
+    public ResponseEntity<String> addPhlebotomistTest(@PathVariable(name = "id") Long id,
+                                                      @RequestBody @Valid LabTestRequestDTO LabTestRequestDTO,
+                                                      HttpServletRequest httpServletRequest)
             throws InvalidAppointmentIdException, InvalidOperationException {
-        if(appointmentOptional.isEmpty()) {
-            throw new InvalidAppointmentIdException("Invalid appointment id");
+        Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
+        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
+
+        Appointment appointment = validationHelper.getAppointmentAfterChecks(appointmentOptional, doctor);
+        LabTestReport labTestReport = new LabTestReport(LabTestRequestDTO);
+        if(appointment.getPhlebotomistTest() == null) {
+            PhlebotomistTest phlebotomistTest = PhlebotomistTest.builder().appointment(appointment).build();
+            phlebotomistTest.addLabTestReport(labTestReport);
+            appointment.setPhlebotomistTest(phlebotomistTest);
+        } else {
+            appointment.getPhlebotomistTest().addLabTestReport(labTestReport);
         }
-        Appointment appointment = appointmentOptional.get();
-        if(!appointment.getDoctor().getUser().getUsername().equals(doctor.getUser().getUsername())) {
-            throw new InvalidOperationException("Doctor cannot access this appointment");
+        labTestReport.setPhlebotomistTest(appointment.getPhlebotomistTest());
+        appointmentService.merge(appointment);
+        return new ResponseEntity<>("Lab Test added successfully", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/appointment/phlebotomist/test/{id}")
+    public ResponseEntity<PhlebotomistTestResponseDTO> getPhlebotomistTestResult(@PathVariable(name = "id") Long id,
+                                                                                 HttpServletRequest httpServletRequest)
+            throws InvalidAppointmentIdException, InvalidOperationException, PhlebotomistTestResultNotFoundException {
+        Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
+        Optional<Appointment> appointmentOptional = appointmentService.getAppointmentById(id);
+
+        Appointment appointment = validationHelper.getAppointmentAfterChecks(appointmentOptional, doctor);
+        if(appointment.getPhlebotomistTest() == null) {
+            throw new PhlebotomistTestResultNotFoundException("Phlebotomist test results not found");
         }
-        return appointment;
+        return new ResponseEntity<>(new PhlebotomistTestResponseDTO(appointment.getPhlebotomistTest()), HttpStatus.OK);
     }
 }

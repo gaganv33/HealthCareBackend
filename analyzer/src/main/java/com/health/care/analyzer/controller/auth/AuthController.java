@@ -16,7 +16,7 @@ import com.health.care.analyzer.exception.authentication.UsernameAlreadyTakenExc
 import com.health.care.analyzer.service.auth.JwtService;
 import com.health.care.analyzer.service.auth.refreshToken.RefreshTokenService;
 import com.health.care.analyzer.service.user.UserService;
-import com.health.care.analyzer.validate.Validation;
+import com.health.care.analyzer.utils.ValidationHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +37,17 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
-    private final Validation validation;
+    private final ValidationHelper validationHelper;
 
     @Autowired
     public AuthController(UserService userService, AuthenticationManager authenticationManager,
                           RefreshTokenService refreshTokenService, JwtService jwtService,
-                          Validation validation) {
+                          ValidationHelper validationHelper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.refreshTokenService = refreshTokenService;
         this.jwtService = jwtService;
-        this.validation = validation;
+        this.validationHelper = validationHelper;
     }
 
     @GetMapping("/test")
@@ -58,7 +58,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid UserRequestDTO userRequestDTO)
             throws UsernameAlreadyTakenException, InvalidRoleException {
-        if(!validation.isRoleValid(userRequestDTO.getRole())) {
+        if(!validationHelper.isRoleValid(userRequestDTO.getRole())) {
             throw new InvalidRoleException("Invalid role");
         }
         User user = new User(userRequestDTO);
@@ -124,7 +124,7 @@ public class AuthController {
     public ResponseEntity<String> registerVendor(
             @RequestBody @Valid MedicineVendorRegisterRequestDTO medicineVendorRegisterRequestDTO)
             throws InvalidRoleException, UsernameAlreadyTakenException {
-        if(!validation.isRoleValid(medicineVendorRegisterRequestDTO.getRole())) {
+        if(!validationHelper.isRoleValid(medicineVendorRegisterRequestDTO.getRole())) {
             throw new InvalidRoleException("Invalid role");
         }
         User user = new User(medicineVendorRegisterRequestDTO);

@@ -1,5 +1,7 @@
 package com.health.care.analyzer.entity.testEntity;
 
+import com.health.care.analyzer.dto.labTestReport.LabTestReportDTO;
+import com.health.care.analyzer.dto.labTestReport.LabTestRequestDTO;
 import com.health.care.analyzer.entity.userEntity.Phlebotomist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,9 @@ public class LabTestReport {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "details", nullable = false)
+    private String details;
+
     @Column(name = "result", nullable = true)
     private String result;
 
@@ -41,4 +46,9 @@ public class LabTestReport {
     }, fetch = FetchType.LAZY)
     @JoinColumn(name = "phlebotomist_test_id")
     private PhlebotomistTest phlebotomistTest;
+
+    public LabTestReport(LabTestRequestDTO labTestRequestDTO) {
+        this.name = labTestRequestDTO.getName();
+        this.details = labTestRequestDTO.getDetails();
+    }
 }

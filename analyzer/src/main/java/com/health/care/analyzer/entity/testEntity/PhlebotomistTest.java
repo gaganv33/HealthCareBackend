@@ -2,7 +2,6 @@ package com.health.care.analyzer.entity.testEntity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.health.care.analyzer.entity.Appointment;
-import com.health.care.analyzer.entity.userEntity.Phlebotomist;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,12 +24,13 @@ public class PhlebotomistTest {
     private Long id;
 
     @JsonBackReference
-    @OneToOne(mappedBy = "phlebotomistTest", cascade = {
+    @OneToOne(cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.EAGER)
+    }, fetch = FetchType.LAZY)
+    @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
     @OneToMany(mappedBy = "phlebotomistTest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

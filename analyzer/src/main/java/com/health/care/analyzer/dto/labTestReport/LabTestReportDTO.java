@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LabTestReportDTO {
     private String name;
+    private String details;
     private String result;
 
     public LabTestReportDTO(LabTestReport labTestReport) {
         this.name = labTestReport.getName();
         this.result = labTestReport.getResult();
+        this.details = labTestReport.getDetails();
     }
 }
