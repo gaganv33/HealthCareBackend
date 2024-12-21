@@ -4,13 +4,13 @@ import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
-import com.health.care.analyzer.utils.StageHelper;
+import com.health.care.analyzer.data.Stage;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,7 +107,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
                 "from Appointment a where a.doctor = :doctor and a.stage = :stage",
                 Appointment.class);
         query.setParameter("doctor", doctor);
-        query.setParameter("stage", StageHelper.DOCTOR);
+        query.setParameter("stage", Stage.DOCTOR);
         return query.getResultList();
     }
 
@@ -122,5 +122,31 @@ public class AppointmentDAOImpl implements AppointmentDAO {
             return Optional.empty();
         }
         return Optional.of(appointmentList.get(0));
+    }
+
+    @Override
+    public List<Appointment> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate) {
+        TypedQuery<Appointment> query = entityManager.createQuery(
+                "from Appointment a where a.doctor = :doctor and a.date >= :startDate", Appointment.class
+        ).setParameter("doctor", doctor).setParameter("startDate", startDate);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Appointment> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate) {
+        TypedQuery<Appointment> query = entityManager.createQuery(
+                "from Appointment a where a.doctor = :doctor and a.date >= :startDate and a.date  <= :endDate",
+                Appointment.class
+        ).setParameter("doctor", doctor).setParameter("startDate", startDate).setParameter("endDate", endDate);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Appointment> getAppointmentUsingDoctor(Doctor doctor) {
+        TypedQuery<Appointment> query = entityManager.createQuery(
+                "from Appointment a where a.doctor = :doctor", Appointment.class
+        );
+        query.setParameter("doctor", doctor);
+        return query.getResultList();
     }
 }

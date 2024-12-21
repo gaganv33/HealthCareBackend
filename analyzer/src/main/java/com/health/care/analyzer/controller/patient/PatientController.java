@@ -23,7 +23,7 @@ import com.health.care.analyzer.service.appointment.AppointmentService;
 import com.health.care.analyzer.service.feedback.FeedbackService;
 import com.health.care.analyzer.service.patient.PatientService;
 import com.health.care.analyzer.service.user.UserService;
-import com.health.care.analyzer.utils.StageHelper;
+import com.health.care.analyzer.data.Stage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +99,7 @@ public class PatientController {
         }
 
         Appointment appointment = Appointment.builder()
-                .stage(StageHelper.DOCTOR)
+                .stage(Stage.DOCTOR)
                 .time(bookAppointmentRequestDTO.getTime())
                 .date(bookAppointmentRequestDTO.getDate())
                 .doctor(doctor)

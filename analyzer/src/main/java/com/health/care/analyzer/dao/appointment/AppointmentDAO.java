@@ -5,6 +5,7 @@ import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,7 @@ public interface AppointmentDAO {
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
     List<Appointment> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
     Optional<Appointment> getAppointmentById(Long id);
+    List<Appointment> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate);
+    List<Appointment> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate);
+    List<Appointment> getAppointmentUsingDoctor(Doctor doctor);
 }

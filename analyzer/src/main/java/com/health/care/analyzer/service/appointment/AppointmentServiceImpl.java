@@ -12,8 +12,10 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -93,5 +95,76 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Optional<Appointment> getAppointmentById(Long id) {
         return appointmentDAO.getAppointmentById(id);
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartTimeEndTimeAndPatientData(
+            Doctor doctor, LocalDate startDate, LocalDate endDate, String patientFirstName, String patientLastName) {
+        List<DoctorAppointmentResponseDTO> appointmentList = getAppointmentUsingDoctorAndDate(doctor, startDate, endDate);
+        return getAppointmentUsingPatientData(appointmentList, patientFirstName, patientLastName);
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientData(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientFirstName, String patientLastName) {
+        if(patientFirstName == null && patientLastName == null) {
+            return appointmentList;
+        } else if(patientFirstName != null && patientLastName != null) {
+            return getAppointmentUsingPatientFirstNameAndLastName(appointmentList, patientFirstName, patientLastName);
+        } else if(patientFirstName != null) {
+            return getAppointmentUsingPatientFirstName(appointmentList, patientFirstName);
+        } else {
+            return getAppointmentUsingPatientLastName(appointmentList, patientLastName);
+        }
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientFirstName(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientFirstName) {
+        appointmentList = appointmentList.stream().filter((appointment) -> {
+            return appointment.getPatientFirstName().equals(patientFirstName);
+        }).collect(Collectors.toList());
+        return appointmentList;
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientLastName(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientLastName) {
+        appointmentList = appointmentList.stream().filter((appointment) -> {
+            return appointment.getPatientLastName().equals(patientLastName);
+        }).collect(Collectors.toList());
+        return appointmentList;
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientFirstNameAndLastName(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientFirstName, String patientLastName) {
+        appointmentList = appointmentList.stream().filter((appointment) -> {
+            return (appointment.getPatientFirstName().equals(patientFirstName) && appointment.getPatientLastName().equals(patientLastName));
+        }).collect(Collectors.toList());
+        return appointmentList;
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorAndDate(Doctor doctor, LocalDate startDate, LocalDate endDate) {
+        if(startDate == null && endDate == null) {
+            return appointmentDAO.getAppointmentUsingDoctor(doctor).stream().map(DoctorAppointmentResponseDTO::new).collect(Collectors.toList());
+        } else if(startDate != null && endDate == null) {
+            return getAppointmentUsingDoctorAndStartDate(doctor, startDate);
+        } else {
+            return getAppointmentUsingDoctorStartDateAndEndDate(doctor, startDate, endDate);
+        }
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate) {
+        return appointmentDAO.getAppointmentUsingDoctorAndStartDate(doctor, startDate)
+                .stream().map(DoctorAppointmentResponseDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate) {
+        return appointmentDAO.getAppointmentUsingDoctorStartDateAndEndDate(doctor, startDate, endDate)
+                .stream().map(DoctorAppointmentResponseDTO::new).collect(Collectors.toList());
     }
 }

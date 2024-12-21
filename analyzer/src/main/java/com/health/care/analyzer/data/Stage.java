@@ -1,6 +1,6 @@
-package com.health.care.analyzer.utils;
+package com.health.care.analyzer.data;
 
-public class StageHelper {
+public class Stage {
     public static final String DOCTOR = "doctor";
     public static final String PHLEBOTOMIST = "phlebotomist";
     public static final String RECEPTIONIST = "receptionist";

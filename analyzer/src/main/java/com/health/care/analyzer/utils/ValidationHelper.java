@@ -1,6 +1,7 @@
 package com.health.care.analyzer.utils;
 
-import com.health.care.analyzer.dao.appointment.StageUpdateRequestDTO;
+import com.health.care.analyzer.data.Stage;
+import com.health.care.analyzer.dto.appointment.StageUpdateRequestDTO;
 import com.health.care.analyzer.data.UserRole;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.userEntity.Doctor;
@@ -8,6 +9,7 @@ import com.health.care.analyzer.exception.InvalidOperationException;
 import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Component
@@ -19,7 +21,7 @@ public class ValidationHelper {
     }
     public boolean isValidStageUpdateInDoctor(StageUpdateRequestDTO stageUpdateRequestDTO) {
         String stage = stageUpdateRequestDTO.getStage();
-        return stage.equals(StageHelper.RECEPTIONIST) || stage.equals(StageHelper.PHLEBOTOMIST) || stage.equals(StageHelper.COMPLETED);
+        return stage.equals(Stage.RECEPTIONIST) || stage.equals(Stage.PHLEBOTOMIST) || stage.equals(Stage.COMPLETED);
     }
 
     public Appointment getAppointmentIfNotNull(Optional<Appointment> appointmentOptional)
@@ -39,7 +41,7 @@ public class ValidationHelper {
 
     public void checkAppointmentIsInDoctorStage(Appointment appointment)
             throws InvalidOperationException {
-        if(!appointment.getStage().equals(StageHelper.DOCTOR)) {
+        if(!appointment.getStage().equals(Stage.DOCTOR)) {
             throw new InvalidOperationException("The appointment is not in doctor's stage");
         }
     }
@@ -50,5 +52,12 @@ public class ValidationHelper {
         checkAppointmentDoctor(appointment, doctor);
         checkAppointmentIsInDoctorStage(appointment);
         return appointment;
+    }
+
+    public boolean isValidStartDateAndEndDate(LocalDate startDate, LocalDate endDate) {
+        if(endDate == null) {
+            return true;
+        }
+        return !startDate.isAfter(endDate);
     }
 }

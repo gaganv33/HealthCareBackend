@@ -1,4 +1,4 @@
-package com.health.care.analyzer.dao.appointment;
+package com.health.care.analyzer.dto.appointment;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

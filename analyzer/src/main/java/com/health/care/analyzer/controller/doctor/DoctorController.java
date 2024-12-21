@@ -1,6 +1,6 @@
 package com.health.care.analyzer.controller.doctor;
 
-import com.health.care.analyzer.dao.appointment.StageUpdateRequestDTO;
+import com.health.care.analyzer.dto.appointment.StageUpdateRequestDTO;
 import com.health.care.analyzer.dto.appointment.DoctorAppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationRequestDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationResponseDTO;
@@ -18,6 +18,7 @@ import com.health.care.analyzer.entity.testEntity.LabTestReport;
 import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.User;
+import com.health.care.analyzer.exception.InvalidDateException;
 import com.health.care.analyzer.exception.InvalidOperationException;
 import com.health.care.analyzer.exception.PhlebotomistTestResultNotFoundException;
 import com.health.care.analyzer.exception.PrescriptionNotFoundException;
@@ -35,6 +36,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,6 +107,25 @@ public class DoctorController {
     public ResponseEntity<List<DoctorAppointmentResponseDTO>> getAllAppointmentUsingDoctorAndDoctorStage(HttpServletRequest httpServletRequest) {
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         return new ResponseEntity<>(appointmentService.getAllAppointmentUsingDoctorAndStage(doctor), HttpStatus.OK);
+    }
+
+    @GetMapping("/appointment")
+    public ResponseEntity<List<DoctorAppointmentResponseDTO>> getAllAppointmentUsingDoctorAndStartDate(
+            @RequestParam(name = "startDate", required = false) LocalDate startDate,
+            @RequestParam(name = "endDate", required = false) LocalDate endDate,
+            @RequestParam(name = "patientFirstName", required = false) String patientFirstName,
+            @RequestParam(name = "patientLastName", required = false) String patientLastName,
+            HttpServletRequest httpServletRequest) throws InvalidDateException, InvalidOperationException {
+        if(startDate == null && endDate != null) {
+            throw new InvalidOperationException("If end date is passed then start date has to be passed");
+        }
+        if(!validationHelper.isValidStartDateAndEndDate(startDate, endDate)) {
+            throw new InvalidDateException("Start date should be before end date");
+        }
+        Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
+        return new ResponseEntity<>(
+                appointmentService.getAppointmentUsingDoctorStartTimeEndTimeAndPatientData(
+                        doctor, startDate, endDate, patientFirstName, patientLastName), HttpStatus.OK);
     }
 
     @PatchMapping("/appointment/stage/{id}")

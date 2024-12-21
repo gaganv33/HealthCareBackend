@@ -8,6 +8,7 @@ import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +24,22 @@ public interface AppointmentService {
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
     List<DoctorAppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
     Optional<Appointment> getAppointmentById(Long id);
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartTimeEndTimeAndPatientData(
+            Doctor doctor, LocalDate startDate, LocalDate endDate, String patientFirstName, String patientLastName);
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientData(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientFirstName, String patientLastName);
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientFirstName(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientFirstName);
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientLastName(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientLastName
+    );
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientFirstNameAndLastName(
+            List<DoctorAppointmentResponseDTO> appointmentList, String patientFirstName, String patientLastName
+    );
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorAndDate(
+            Doctor doctor, LocalDate startDate, LocalDate endDate
+    );
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate);
+    List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate);
+
 }
