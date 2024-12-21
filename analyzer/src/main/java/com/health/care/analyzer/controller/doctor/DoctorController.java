@@ -1,10 +1,9 @@
 package com.health.care.analyzer.controller.doctor;
 
 import com.health.care.analyzer.dao.appointment.StageUpdateRequestDTO;
-import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
+import com.health.care.analyzer.dto.appointment.DoctorAppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationRequestDTO;
 import com.health.care.analyzer.dto.doctor.designation.DesignationResponseDTO;
-import com.health.care.analyzer.dto.labTestReport.LabTestReportDTO;
 import com.health.care.analyzer.dto.labTestReport.LabTestRequestDTO;
 import com.health.care.analyzer.dto.medicine.MedicineRecordRequestDTO;
 import com.health.care.analyzer.dto.phlebotomistTest.PhlebotomistTestResponseDTO;
@@ -103,7 +102,7 @@ public class DoctorController {
     }
 
     @GetMapping("/all/appointment")
-    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointmentUsingDoctorAndDoctorStage(HttpServletRequest httpServletRequest) {
+    public ResponseEntity<List<DoctorAppointmentResponseDTO>> getAllAppointmentUsingDoctorAndDoctorStage(HttpServletRequest httpServletRequest) {
         Doctor doctor = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getDoctor();
         return new ResponseEntity<>(appointmentService.getAllAppointmentUsingDoctorAndStage(doctor), HttpStatus.OK);
     }

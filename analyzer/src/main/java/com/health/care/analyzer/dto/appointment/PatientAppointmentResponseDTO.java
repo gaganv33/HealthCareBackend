@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppointmentResponseDTO {
+public class PatientAppointmentResponseDTO {
     private Long id;
     private LocalDate date;
     private String stage;
@@ -22,7 +22,7 @@ public class AppointmentResponseDTO {
     private String doctorLastName;
     private String doctorUsername;
 
-    public AppointmentResponseDTO(Appointment appointment) {
+    public PatientAppointmentResponseDTO(Appointment appointment) {
         this.id = appointment.getId();
         this.date = appointment.getDate();
         this.stage = appointment.getStage();

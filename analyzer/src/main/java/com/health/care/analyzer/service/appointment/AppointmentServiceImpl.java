@@ -1,7 +1,8 @@
 package com.health.care.analyzer.service.appointment;
 
 import com.health.care.analyzer.dao.appointment.AppointmentDAO;
-import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
+import com.health.care.analyzer.dto.appointment.DoctorAppointmentResponseDTO;
+import com.health.care.analyzer.dto.appointment.PatientAppointmentResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
@@ -51,26 +52,26 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponseDTO> getAllAppointmentUsingPatient(Patient patient) {
-        return appointmentDAO.getAllAppointmentUsingPatient(patient).stream().map(AppointmentResponseDTO::new).toList();
+    public List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatient(Patient patient) {
+        return appointmentDAO.getAllAppointmentUsingPatient(patient).stream().map(PatientAppointmentResponseDTO::new).toList();
     }
 
     @Override
-    public List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndStage(Patient patient, String stage) {
+    public List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatientAndStage(Patient patient, String stage) {
         return appointmentDAO.getAllAppointmentUsingPatientAndStage(patient, stage).
-                stream().map(AppointmentResponseDTO::new).toList();
+                stream().map(PatientAppointmentResponseDTO::new).toList();
     }
 
     @Override
-    public List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor) {
+    public List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor) {
         return appointmentDAO.getAllAppointmentUsingPatientAndDoctor(patient, doctor).
-                stream().map(AppointmentResponseDTO::new).toList();
+                stream().map(PatientAppointmentResponseDTO::new).toList();
     }
 
     @Override
-    public List<AppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage) {
+    public List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage) {
         return appointmentDAO.getAllAppointmentUsingPatientDoctorAndStage(patient, doctor, stage).
-                stream().map(AppointmentResponseDTO::new).toList();
+                stream().map(PatientAppointmentResponseDTO::new).toList();
     }
 
     @Override
@@ -85,8 +86,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor) {
-        return appointmentDAO.getAllAppointmentUsingDoctorAndStage(doctor).stream().map(AppointmentResponseDTO::new).toList();
+    public List<DoctorAppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor) {
+        return appointmentDAO.getAllAppointmentUsingDoctorAndStage(doctor).stream().map(DoctorAppointmentResponseDTO::new).toList();
     }
 
     @Override

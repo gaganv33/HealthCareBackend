@@ -1,6 +1,7 @@
 package com.health.care.analyzer.service.appointment;
 
-import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
+import com.health.care.analyzer.dto.appointment.DoctorAppointmentResponseDTO;
+import com.health.care.analyzer.dto.appointment.PatientAppointmentResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
@@ -14,12 +15,12 @@ public interface AppointmentService {
     Appointment save(Appointment appointment);
     void merge(Appointment appointment);
     void deleteAppointmentByPatientAndId(Patient patient, long id) throws InvalidAppointmentIdException;
-    List<AppointmentResponseDTO> getAllAppointmentUsingPatient(Patient patient);
-    List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndStage(Patient patient, String stage);
-    List<AppointmentResponseDTO> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor);
-    List<AppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage);
+    List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatient(Patient patient);
+    List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatientAndStage(Patient patient, String stage);
+    List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatientAndDoctor(Patient patient, Doctor doctor);
+    List<PatientAppointmentResponseDTO> getAllAppointmentUsingPatientDoctorAndStage(Patient patient, Doctor doctor, String stage);
     void updateFeedback(Long id, Feedback feedback);
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
-    List<AppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
+    List<DoctorAppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
     Optional<Appointment> getAppointmentById(Long id);
 }

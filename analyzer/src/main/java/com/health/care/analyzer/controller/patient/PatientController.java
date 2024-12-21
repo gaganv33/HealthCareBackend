@@ -1,7 +1,7 @@
 package com.health.care.analyzer.controller.patient;
 
 import com.health.care.analyzer.dto.appointment.AppointmentFeedbackRequestDTO;
-import com.health.care.analyzer.dto.appointment.AppointmentResponseDTO;
+import com.health.care.analyzer.dto.appointment.PatientAppointmentResponseDTO;
 import com.health.care.analyzer.dto.doctor.UserProfileResponseDTO;
 import com.health.care.analyzer.dto.feedback.FeedbackResponseDTO;
 import com.health.care.analyzer.dto.patient.BookAppointmentRequestDTO;
@@ -123,7 +123,7 @@ public class PatientController {
     }
 
     @GetMapping("/all/appointment")
-    public ResponseEntity<List<AppointmentResponseDTO>> getAllAppointment(
+    public ResponseEntity<List<PatientAppointmentResponseDTO>> getAllAppointment(
             @RequestParam(name = "stage", required = false) String stage,
             @RequestParam(name = "doctor", required = false) String doctorUsername,
             HttpServletRequest httpServletRequest)
@@ -131,13 +131,13 @@ public class PatientController {
         Patient patient = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization"))
                 .getPatient();
 
-        List<AppointmentResponseDTO> appointments = getAllAppointmentBasedOnStageDoctorUsernameAndDate(
+        List<PatientAppointmentResponseDTO> appointments = getAllAppointmentBasedOnStageDoctorUsername(
                 patient, stage, doctorUsername);
 
         return new ResponseEntity<>(appointments, HttpStatus.OK);
     }
 
-    private List<AppointmentResponseDTO> getAllAppointmentBasedOnStageDoctorUsernameAndDate(Patient patient,
+    private List<PatientAppointmentResponseDTO> getAllAppointmentBasedOnStageDoctorUsername(Patient patient,
                                                                                             String stage,
                                                                                             String doctorUsername)
             throws DoctorNotFoundException {
