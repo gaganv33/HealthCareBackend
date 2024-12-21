@@ -19,7 +19,7 @@ public class ValidationHelper {
     }
     public boolean isValidStageUpdateInDoctor(StageUpdateRequestDTO stageUpdateRequestDTO) {
         String stage = stageUpdateRequestDTO.getStage();
-        return stage.equals("receptionist") || stage.equals("phlebotomist") || stage.equals("completed");
+        return stage.equals(StageHelper.RECEPTIONIST) || stage.equals(StageHelper.PHLEBOTOMIST) || stage.equals(StageHelper.COMPLETED);
     }
 
     public Appointment getAppointmentIfNotNull(Optional<Appointment> appointmentOptional)
@@ -39,7 +39,7 @@ public class ValidationHelper {
 
     public void checkAppointmentIsInDoctorStage(Appointment appointment)
             throws InvalidOperationException {
-        if(!appointment.getStage().equals("doctor")) {
+        if(!appointment.getStage().equals(StageHelper.DOCTOR)) {
             throw new InvalidOperationException("The appointment is not in doctor's stage");
         }
     }

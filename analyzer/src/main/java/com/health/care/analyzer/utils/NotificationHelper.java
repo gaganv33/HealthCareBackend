@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 public class NotificationHelper {
     public String getStageUpdateMessage(StageUpdateRequestDTO stageUpdateRequestDTO) throws InvalidOperationException {
         return switch (stageUpdateRequestDTO.getStage()) {
-            case "receptionist" -> "Appointment transferred to receptionist";
-            case "phlebotomist" -> "Appointment transferred to phlebotomist";
-            case "completed" -> "Appointment completed";
+            case StageHelper.RECEPTIONIST -> "Appointment transferred to receptionist";
+            case StageHelper.PHLEBOTOMIST -> "Appointment transferred to phlebotomist";
+            case StageHelper.COMPLETED -> "Appointment completed";
             default -> throw new InvalidOperationException("Invalid stage");
         };
     }

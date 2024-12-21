@@ -4,6 +4,7 @@ import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
+import com.health.care.analyzer.utils.StageHelper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +107,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
                 "from Appointment a where a.doctor = :doctor and a.stage = :stage",
                 Appointment.class);
         query.setParameter("doctor", doctor);
-        query.setParameter("stage", "doctor");
+        query.setParameter("stage", StageHelper.DOCTOR);
         return query.getResultList();
     }
 

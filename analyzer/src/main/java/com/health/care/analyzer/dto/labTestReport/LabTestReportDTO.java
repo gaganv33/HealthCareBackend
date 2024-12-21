@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LabTestReportDTO {
+    private Long id;
     private String name;
     private String details;
     private String result;
 
     public LabTestReportDTO(LabTestReport labTestReport) {
+        this.id = labTestReport.getId();
         this.name = labTestReport.getName();
         this.result = labTestReport.getResult();
         this.details = labTestReport.getDetails();
