@@ -49,4 +49,17 @@ public class PhlebotomistDAOImpl implements PhlebotomistDAO {
                 .setParameter("user", phlebotomist.getUser())
                 .executeUpdate();
     }
+
+    @Override
+    public Phlebotomist getPhlebotomistProfile(User user) {
+        TypedQuery<Phlebotomist> query = entityManager.createQuery(
+                "from Phlebotomist p where p.user = :user", Phlebotomist.class
+        );
+        query.setParameter("user", user);
+        List<Phlebotomist> phlebotomistList = query.getResultList();
+        if(phlebotomistList.isEmpty()) {
+            return new Phlebotomist();
+        }
+        return phlebotomistList.get(0);
+    }
 }

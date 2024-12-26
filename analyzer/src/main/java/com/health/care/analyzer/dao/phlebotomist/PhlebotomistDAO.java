@@ -9,4 +9,5 @@ public interface PhlebotomistDAO {
     Phlebotomist save(Phlebotomist phlebotomist);
     Optional<Phlebotomist> findByUser(User user);
     void update(Phlebotomist phlebotomist);
+    Phlebotomist getPhlebotomistProfile(User user);
 }

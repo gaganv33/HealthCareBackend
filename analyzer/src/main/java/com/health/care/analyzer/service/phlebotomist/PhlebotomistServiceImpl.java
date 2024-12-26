@@ -1,7 +1,9 @@
 package com.health.care.analyzer.service.phlebotomist;
 
 import com.health.care.analyzer.dao.phlebotomist.PhlebotomistDAO;
+import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
 import com.health.care.analyzer.entity.userEntity.Phlebotomist;
+import com.health.care.analyzer.entity.userEntity.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,5 +28,17 @@ public class PhlebotomistServiceImpl implements PhlebotomistService {
         } else {
             phlebotomistDAO.update(phlebotomist);
         }
+    }
+
+    @Override
+    public ProfileResponseDTO getPhlebotomistProfile(User user) {
+        Phlebotomist phlebotomist = phlebotomistDAO.getPhlebotomistProfile(user);
+        return ProfileResponseDTO.builder()
+                .dob(phlebotomist.getDob())
+                .phoneNo(phlebotomist.getPhoneNo())
+                .bloodGroup(phlebotomist.getBloodGroup())
+                .weight(phlebotomist.getWeight())
+                .height(phlebotomist.getHeight())
+                .build();
     }
 }
