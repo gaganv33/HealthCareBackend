@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PendingLabTestReportDTO {
     private Long id;
+    private Long appointmentId;
     private String name;
     private String details;
     private String patientFirstname;
@@ -21,6 +22,7 @@ public class PendingLabTestReportDTO {
 
     public PendingLabTestReportDTO(LabTestReport labTestReport) {
         this.id = labTestReport.getId();
+        this.appointmentId = labTestReport.getPhlebotomistTest().getAppointment().getId();
         this.name = labTestReport.getName();
         this.details = labTestReport.getDetails();
         this.patientFirstname = labTestReport.getPhlebotomistTest().getAppointment().getPatient().getUser().getFirstName();
