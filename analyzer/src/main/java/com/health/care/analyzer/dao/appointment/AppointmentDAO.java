@@ -21,6 +21,7 @@ public interface AppointmentDAO {
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
     List<Appointment> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
     Optional<Appointment> getAppointmentById(Long id);
+    Optional<Appointment> getAppointmentByUsingWithPhlebotomistTest(Long id);
     List<Appointment> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate);
     List<Appointment> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate);
     List<Appointment> getAppointmentUsingDoctor(Doctor doctor);

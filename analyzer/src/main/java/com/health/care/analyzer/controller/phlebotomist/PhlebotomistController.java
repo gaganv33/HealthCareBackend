@@ -4,10 +4,13 @@ import com.health.care.analyzer.dto.labTestReport.PendingLabTestReportDTO;
 import com.health.care.analyzer.dto.phlebotomistTest.ResultDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
+import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.testEntity.LabTestReport;
 import com.health.care.analyzer.entity.userEntity.Phlebotomist;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.InvalidOperationException;
+import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
+import com.health.care.analyzer.service.appointment.AppointmentService;
 import com.health.care.analyzer.service.labTestReport.LabTestReportService;
 import com.health.care.analyzer.service.phlebotomist.PhlebotomistService;
 import com.health.care.analyzer.service.user.UserService;
@@ -29,13 +32,15 @@ public class PhlebotomistController {
     private final UserService userService;
     private final PhlebotomistService phlebotomistService;
     private final LabTestReportService labTestReportService;
+    private final AppointmentService appointmentService;
 
     @Autowired
     public PhlebotomistController(UserService userService, PhlebotomistService phlebotomistService,
-                                  LabTestReportService labTestReportService) {
+                                  LabTestReportService labTestReportService, AppointmentService appointmentService) {
         this.userService = userService;
         this.phlebotomistService = phlebotomistService;
         this.labTestReportService = labTestReportService;
+        this.appointmentService = appointmentService;
     }
 
     @GetMapping("/test")
@@ -102,5 +107,19 @@ public class PhlebotomistController {
     public ResponseEntity<List<PendingLabTestReportDTO>> getAllPendingLabTestUsingPhlebotomist(HttpServletRequest httpServletRequest) {
         Phlebotomist phlebotomist = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getPhlebotomist();
         return new ResponseEntity<>(labTestReportService.getAllPendingLabTestUsingPhlebotomist(phlebotomist), HttpStatus.OK);
+    }
+
+    @PostMapping("/lab/test/update/status/{id}")
+    public ResponseEntity<String> updateStatusOfAppointmentUsingId(@PathVariable(name = "id") Long id)
+            throws InvalidAppointmentIdException, InvalidOperationException {
+        Optional<Appointment> optionalAppointment = appointmentService.getAppointmentByIdWithPhlebotomistTest(id);
+        if(optionalAppointment.isEmpty()) {
+            throw new InvalidAppointmentIdException("Invalid Appointment");
+        }
+        Appointment appointment = optionalAppointment.get();
+        if(!appointmentService.isUpdatedAppointmentFromPhlebotomistToDoctor(appointment)) {
+            throw new InvalidOperationException("Error while updating the status from phlebotomist to doctor");
+        }
+        return new ResponseEntity<>("Appointment transferred to doctor", HttpStatus.OK);
     }
 }

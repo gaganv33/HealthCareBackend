@@ -24,6 +24,7 @@ public interface AppointmentService {
     Optional<Appointment> getAppointmentUsingPatientAndId(Patient patient, Long id);
     List<DoctorAppointmentResponseDTO> getAllAppointmentUsingDoctorAndStage(Doctor doctor);
     Optional<Appointment> getAppointmentById(Long id);
+    Optional<Appointment> getAppointmentByIdWithPhlebotomistTest(Long id);
     List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartTimeEndTimeAndPatientData(
             Doctor doctor, LocalDate startDate, LocalDate endDate, String patientFirstName, String patientLastName);
     List<DoctorAppointmentResponseDTO> getAppointmentUsingPatientData(
@@ -41,5 +42,5 @@ public interface AppointmentService {
     );
     List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate);
     List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate);
-
+    boolean isUpdatedAppointmentFromPhlebotomistToDoctor(Appointment appointment);
 }

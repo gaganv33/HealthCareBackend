@@ -1,29 +1,37 @@
 package com.health.care.analyzer.service.appointment;
 
 import com.health.care.analyzer.dao.appointment.AppointmentDAO;
+import com.health.care.analyzer.data.Stage;
 import com.health.care.analyzer.dto.appointment.DoctorAppointmentResponseDTO;
 import com.health.care.analyzer.dto.appointment.PatientAppointmentResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
+import com.health.care.analyzer.entity.testEntity.LabTestReport;
+import com.health.care.analyzer.entity.testEntity.PhlebotomistTest;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
+import com.health.care.analyzer.service.phlebotomistTest.PhlebotomistTestService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
     private final AppointmentDAO appointmentDAO;
+    private final PhlebotomistTestService phlebotomistTestService;
 
     @Autowired
-    public AppointmentServiceImpl(AppointmentDAO appointmentDAO) {
+    public AppointmentServiceImpl(AppointmentDAO appointmentDAO,
+                                  PhlebotomistTestService phlebotomistTestService) {
         this.appointmentDAO = appointmentDAO;
+        this.phlebotomistTestService = phlebotomistTestService;
     }
 
     @Override
@@ -98,6 +106,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public Optional<Appointment> getAppointmentByIdWithPhlebotomistTest(Long id) {
+        return appointmentDAO.getAppointmentByUsingWithPhlebotomistTest(id);
+    }
+
+    @Override
     public List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartTimeEndTimeAndPatientData(
             Doctor doctor, LocalDate startDate, LocalDate endDate, String patientFirstName, String patientLastName) {
         List<DoctorAppointmentResponseDTO> appointmentList = getAppointmentUsingDoctorAndDate(doctor, startDate, endDate);
@@ -166,5 +179,30 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate) {
         return appointmentDAO.getAppointmentUsingDoctorStartDateAndEndDate(doctor, startDate, endDate)
                 .stream().map(DoctorAppointmentResponseDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public boolean isUpdatedAppointmentFromPhlebotomistToDoctor(Appointment appointment) {
+        if(!Objects.equals(appointment.getStage(), Stage.PHLEBOTOMIST)) {
+            return false;
+        }
+        PhlebotomistTest phlebotomistTest = appointment.getPhlebotomistTest();
+        if(phlebotomistTest == null) {
+            return false;
+        }
+        Optional<PhlebotomistTest> optionalPhlebotomistTest = phlebotomistTestService.getPhlebotomistTestUsingIdWithLabTestReports(phlebotomistTest.getId());
+        if(optionalPhlebotomistTest.isEmpty()) {
+            return false;
+        }
+        List<LabTestReport> labTestReportList = optionalPhlebotomistTest.get().getLabTestReportList();
+        for(LabTestReport labTestReport : labTestReportList) {
+            if(labTestReport.getResult() == null) {
+                return false;
+            }
+        }
+        appointment.setStage(Stage.DOCTOR);
+        appointmentDAO.merge(appointment);
+        return true;
     }
 }
