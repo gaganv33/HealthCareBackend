@@ -9,4 +9,5 @@ public interface ReceptionistDAO {
     Receptionist save(Receptionist receptionist);
     Optional<Receptionist> findByUser(User user);
     void update(Receptionist receptionist);
+    public Receptionist getReceptionistProfile(User user);
 }

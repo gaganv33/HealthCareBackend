@@ -39,7 +39,7 @@ public class ReceptionistDAOImpl implements ReceptionistDAO {
 
     @Override
     public void update(Receptionist receptionist) {
-        entityManager.createQuery("update Receptionist r set r.dob = :dob, r.weight = :weight, r.height = height, " +
+        entityManager.createQuery("update Receptionist r set r.dob = :dob, r.weight = :weight, r.height = :height, " +
                 "r.phoneNo = :phoneNo, r.bloodGroup = :bloodGroup where r.user = :user")
                 .setParameter("dob", receptionist.getDob())
                 .setParameter("weight", receptionist.getWeight())
@@ -48,5 +48,18 @@ public class ReceptionistDAOImpl implements ReceptionistDAO {
                 .setParameter("bloodGroup", receptionist.getBloodGroup())
                 .setParameter("user", receptionist.getUser())
                 .executeUpdate();
+    }
+
+    @Override
+    public Receptionist getReceptionistProfile(User user) {
+        TypedQuery<Receptionist> query = entityManager.createQuery(
+                "from Receptionist r where r.user = :user", Receptionist.class
+        );
+        query.setParameter("user", user);
+        List<Receptionist> receptionistList = query.getResultList();
+        if(receptionistList.isEmpty()) {
+            return new Receptionist();
+        }
+        return receptionistList.get(0);
     }
 }
