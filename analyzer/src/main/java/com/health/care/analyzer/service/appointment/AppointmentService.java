@@ -4,6 +4,7 @@ import com.health.care.analyzer.dto.appointment.DoctorAppointmentResponseDTO;
 import com.health.care.analyzer.dto.appointment.PatientAppointmentResponseDTO;
 import com.health.care.analyzer.entity.Appointment;
 import com.health.care.analyzer.entity.Feedback;
+import com.health.care.analyzer.entity.testEntity.LabTestReport;
 import com.health.care.analyzer.entity.userEntity.Doctor;
 import com.health.care.analyzer.entity.userEntity.Patient;
 import com.health.care.analyzer.exception.appointment.InvalidAppointmentIdException;
@@ -43,4 +44,5 @@ public interface AppointmentService {
     List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorAndStartDate(Doctor doctor, LocalDate startDate);
     List<DoctorAppointmentResponseDTO> getAppointmentUsingDoctorStartDateAndEndDate(Doctor doctor, LocalDate startDate, LocalDate endDate);
     boolean isUpdatedAppointmentFromPhlebotomistToDoctor(Appointment appointment);
+    boolean checkIfAllLabTestResultAreUpdated(List<LabTestReport> labTestReportList);
 }

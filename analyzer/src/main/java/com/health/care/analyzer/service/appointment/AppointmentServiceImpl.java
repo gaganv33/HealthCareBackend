@@ -196,13 +196,21 @@ public class AppointmentServiceImpl implements AppointmentService {
             return false;
         }
         List<LabTestReport> labTestReportList = optionalPhlebotomistTest.get().getLabTestReportList();
+        if(!checkIfAllLabTestResultAreUpdated(labTestReportList)) {
+            return false;
+        }
+        appointment.setStage(Stage.DOCTOR);
+        appointmentDAO.merge(appointment);
+        return true;
+    }
+
+    @Override
+    public boolean checkIfAllLabTestResultAreUpdated(List<LabTestReport> labTestReportList) {
         for(LabTestReport labTestReport : labTestReportList) {
             if(labTestReport.getResult() == null) {
                 return false;
             }
         }
-        appointment.setStage(Stage.DOCTOR);
-        appointmentDAO.merge(appointment);
         return true;
     }
 }
