@@ -1,11 +1,15 @@
 package com.health.care.analyzer.controller.receptionist;
 
 import com.health.care.analyzer.dto.prescription.NotAssignedPrescription;
+import com.health.care.analyzer.dto.prescription.PrescriptionResponseDTO;
 import com.health.care.analyzer.dto.profile.ProfileRequestDTO;
 import com.health.care.analyzer.dto.profile.ProfileResponseDTO;
+import com.health.care.analyzer.dto.receptionist.OnSavePrescriptionMedicineListDTO;
+import com.health.care.analyzer.entity.Prescription;
 import com.health.care.analyzer.entity.userEntity.Receptionist;
 import com.health.care.analyzer.entity.userEntity.User;
 import com.health.care.analyzer.exception.InvalidOperationException;
+import com.health.care.analyzer.exception.PrescriptionNotFoundException;
 import com.health.care.analyzer.service.prescription.PrescriptionService;
 import com.health.care.analyzer.service.receptionist.ReceptionistService;
 import com.health.care.analyzer.service.user.UserService;
@@ -18,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/receptionist")
@@ -73,5 +78,26 @@ public class ReceptionistController {
             throw new InvalidOperationException("Prescription id is invalid or this prescription is already assigned to another receptionist");
         }
         return new ResponseEntity<>("Prescription is assigned successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("/prescription/all")
+    public ResponseEntity<List<PrescriptionResponseDTO>> getAllPrescriptionUsingReceptionist(HttpServletRequest httpServletRequest) {
+        Receptionist receptionist = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getReceptionist();
+        List<Prescription> prescriptionList = prescriptionService.getPrescriptionUsingReceptionist(receptionist);
+        List<PrescriptionResponseDTO> prescriptionResponseDTOS = prescriptionList.stream().map(PrescriptionResponseDTO::new).toList();
+        return new ResponseEntity<>(prescriptionResponseDTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/prescription/medicine/list/{id}")
+    public ResponseEntity<OnSavePrescriptionMedicineListDTO> onSavePrescriptionUsingIdAndPhlebotomist(
+            @PathVariable(name = "id") Long id, HttpServletRequest httpServletRequest)
+            throws PrescriptionNotFoundException {
+        Receptionist receptionist = userService.getUserUsingAuthorizationHeader(httpServletRequest.getHeader("Authorization")).getReceptionist();
+        Optional<Prescription> prescriptionOptional = prescriptionService.getPrescriptionUsingIdAndReceptionist(id, receptionist);
+        if(prescriptionOptional.isEmpty()) {
+            throw new PrescriptionNotFoundException("Prescription not found");
+        }
+        OnSavePrescriptionMedicineListDTO onSavePrescriptionMedicineListDTO = prescriptionService.onSavePrescriptionMedicineList(prescriptionOptional.get());
+        return new ResponseEntity<> (onSavePrescriptionMedicineListDTO, HttpStatus.OK);
     }
 }

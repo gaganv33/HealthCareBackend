@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,23 @@ public class MedicineDAOImpl implements MedicineDAO {
                 Medicine.class);
         query.setParameter("serialNo", serialNo);
         return query.getResultList();
+    }
+
+    @Override
+    public Optional<Medicine> getMedicineUsingMedicineNameAndQuantity(String name, Integer quantity) {
+        TypedQuery<Medicine> query = entityManager.createQuery(
+                "from Medicine m where m.name = :name and m.quantity >= :quantity",
+                Medicine.class
+        );
+        query.setParameter("name", name);
+        query.setParameter("quantity", quantity);
+        List<Medicine> medicineList = query.getResultList();
+        if(medicineList.isEmpty()) {
+            return Optional.empty();
+        }
+        medicineList.sort(Comparator.comparing(Medicine::getExpiryDate));
+        // Log
+        System.out.println(medicineList);
+        return Optional.of(medicineList.get(0));
     }
 }

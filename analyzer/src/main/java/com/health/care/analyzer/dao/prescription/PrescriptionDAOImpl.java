@@ -1,6 +1,7 @@
 package com.health.care.analyzer.dao.prescription;
 
 import com.health.care.analyzer.entity.Prescription;
+import com.health.care.analyzer.entity.userEntity.Receptionist;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,30 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
     @Override
     public void merge(Prescription prescription) {
         entityManager.merge(prescription);
+    }
+
+    @Override
+    public Optional<Prescription> getPrescriptionUsingIdAndReceptionist(Long id, Receptionist receptionist) {
+        TypedQuery<Prescription> query = entityManager.createQuery(
+                "from Prescription p where p.id = :id and p.receptionist = :receptionist",
+                Prescription.class
+        );
+        query.setParameter("id", id);
+        query.setParameter("receptionist", receptionist);
+        List<Prescription> prescriptionList = query.getResultList();
+        if(prescriptionList.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(prescriptionList.get(0));
+    }
+
+    @Override
+    public List<Prescription> getPrescriptionUsingReceptionist(Receptionist receptionist) {
+        TypedQuery<Prescription> query = entityManager.createQuery(
+                "from Prescription p join fetch p.receptionist where p.receptionist = :receptionist",
+                Prescription.class
+        );
+        query.setParameter("receptionist", receptionist);
+        return query.getResultList();
     }
 }

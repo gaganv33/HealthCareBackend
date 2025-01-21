@@ -40,4 +40,9 @@ public class MedicineServiceImpl implements MedicineService {
     public List<Medicine> findBySerialNo(String serialNo) {
         return medicineDAO.findBySerialNo(serialNo);
     }
+
+    @Override
+    public Optional<Medicine> getMedicineUsingMedicineNameAndQuantity(String name, Integer quantity) {
+        return medicineDAO.getMedicineUsingMedicineNameAndQuantity(name, quantity);
+    }
 }

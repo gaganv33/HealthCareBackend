@@ -11,4 +11,5 @@ public interface MedicineService {
     Medicine save(Medicine medicine);
     Medicine merge(Medicine medicine);
     List<Medicine> findBySerialNo(String serialNo);
+    Optional<Medicine> getMedicineUsingMedicineNameAndQuantity(String name, Integer quantity);
 }

@@ -15,12 +15,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrescriptionResponseDTO {
+    private Long id;
     private String receptionistUsername;
     private List<MedicineRecordResponseDTO> requiredMedicine;
     private List<AvailableMedicineRecordResponseDTO> availableMedicine;
     private List<MedicineRecordResponseDTO> pendingMedicine;
 
     public PrescriptionResponseDTO(Prescription prescription) {
+        this.id = prescription.getId();
         if(prescription.getReceptionist() != null) {
             this.receptionistUsername = prescription.getReceptionist().getUser().getUsername();
         }

@@ -1,6 +1,7 @@
 package com.health.care.analyzer.dto.medicine;
 
 import com.health.care.analyzer.entity.medicineEntity.AvailableMedicineRecord;
+import com.health.care.analyzer.entity.medicineEntity.Medicine;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,5 +26,13 @@ public class AvailableMedicineRecordResponseDTO {
         this.quantity = availableMedicineRecord.getQuantity();
         this.serialNo = availableMedicineRecord.getSerialNo();
         this.expiryDate = availableMedicineRecord.getExpiryDate();
+    }
+
+    public AvailableMedicineRecordResponseDTO(Medicine medicine) {
+        this.id = medicine.getId();
+        this.name = medicine.getName();
+        this.quantity = medicine.getQuantity();
+        this.serialNo = medicine.getSerialNo();
+        this.expiryDate = medicine.getExpiryDate();
     }
 }
