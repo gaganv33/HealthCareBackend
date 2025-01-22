@@ -20,6 +20,7 @@ public class OnSavePrescriptionMedicineListDTO {
     private List<MedicineRecordResponseDTO> requiredMedicineList;
     private List<AvailableMedicineRecordResponseDTO> availableMedicineList;
     private List<MedicineRecordResponseDTO> pendingMedicineList;
+    private String message;
 
     public OnSavePrescriptionMedicineListDTO(List<MedicineRecord> requiredMedicineRecordList) {
         requiredMedicineList = requiredMedicineRecordList.stream().map(MedicineRecordResponseDTO::new).toList();

@@ -127,7 +127,7 @@ public class AppointmentDAOImpl implements AppointmentDAO {
     @Override
     public Optional<Appointment> getAppointmentByUsingWithPhlebotomistTest(Long id) {
         TypedQuery<Appointment> query = entityManager.createQuery(
-                "from Appointment a join fetch a.phlebotomistTest where a.id = :id",
+                "from Appointment a where a.id = :id",
                 Appointment.class);
         query.setParameter("id", id);
         List<Appointment> appointmentList = query.getResultList();

@@ -31,7 +31,7 @@ public class Prescription {
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
@@ -41,19 +41,19 @@ public class Prescription {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     @JoinColumn(name = "receptionist_id")
     private Receptionist receptionist;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "required_medicine")
     private List<MedicineRecord> requiredMedicineList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "available_medicine")
     private List<AvailableMedicineRecord> availableMedicineList;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "pending_medicine")
     private List<MedicineRecord> pendingMedicineList;
 

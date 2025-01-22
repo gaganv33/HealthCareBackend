@@ -63,15 +63,15 @@ public class Appointment {
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Prescription prescription;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private PhlebotomistTest phlebotomistTest;
 }

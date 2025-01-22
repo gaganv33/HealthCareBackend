@@ -42,7 +42,7 @@ public class Medicine {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     @JoinTable(
             name = "medicine_vendor_join",
             joinColumns = @JoinColumn(name = "medicine_id"),

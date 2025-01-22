@@ -21,7 +21,7 @@ public class PhlebotomistTestDAOImpl implements PhlebotomistTestDAO {
     @Override
     public Optional<PhlebotomistTest> getPhlebotomistTestUsingIdWithLabTestReports(Long id) {
         TypedQuery<PhlebotomistTest> query = entityManager.createQuery(
-                "from PhlebotomistTest pt join fetch pt.labTestReportList where pt.id = :id",
+                "from PhlebotomistTest pt where pt.id = :id",
                 PhlebotomistTest.class
         );
         query.setParameter("id", id);

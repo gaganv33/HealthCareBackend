@@ -44,12 +44,12 @@ public class Doctor {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "doctor_id")
     private List<Designation> designationList;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Appointment> appointmentList;
 
     public void addDesignation(Designation designation) {

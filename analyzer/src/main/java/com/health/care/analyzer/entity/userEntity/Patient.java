@@ -44,7 +44,7 @@ public class Patient {
     private User user;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Appointment> appointmentList;
 
     public void addAppointment(Appointment appointment) {

@@ -32,6 +32,6 @@ public class RefreshToken {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.PERSIST
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     private User user;
 }

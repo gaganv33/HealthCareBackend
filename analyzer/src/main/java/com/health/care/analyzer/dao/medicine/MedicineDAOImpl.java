@@ -69,8 +69,6 @@ public class MedicineDAOImpl implements MedicineDAO {
             return Optional.empty();
         }
         medicineList.sort(Comparator.comparing(Medicine::getExpiryDate));
-        // Log
-        System.out.println(medicineList);
         return Optional.of(medicineList.get(0));
     }
 }

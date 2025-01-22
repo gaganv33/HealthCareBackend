@@ -1,5 +1,6 @@
 package com.health.care.analyzer.dao.prescription;
 
+import com.health.care.analyzer.data.Stage;
 import com.health.care.analyzer.entity.Prescription;
 import com.health.care.analyzer.entity.userEntity.Receptionist;
 import jakarta.persistence.EntityManager;
@@ -22,9 +23,10 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
     @Override
     public List<Prescription> getNotAssignedPrescription() {
         TypedQuery<Prescription> query = entityManager.createQuery(
-                "from Prescription p join fetch p.appointment where p.receptionist is null",
+                "from Prescription p where p.receptionist is null and p.appointment.stage = :stage",
                 Prescription.class
         );
+        query.setParameter("stage", Stage.RECEPTIONIST);
         return query.getResultList();
     }
 
@@ -64,10 +66,11 @@ public class PrescriptionDAOImpl implements PrescriptionDAO {
     @Override
     public List<Prescription> getPrescriptionUsingReceptionist(Receptionist receptionist) {
         TypedQuery<Prescription> query = entityManager.createQuery(
-                "from Prescription p join fetch p.receptionist where p.receptionist = :receptionist",
+                "from Prescription p where p.receptionist = :receptionist and p.appointment.stage = :stage",
                 Prescription.class
         );
         query.setParameter("receptionist", receptionist);
+        query.setParameter("stage", Stage.RECEPTIONIST);
         return query.getResultList();
     }
 }

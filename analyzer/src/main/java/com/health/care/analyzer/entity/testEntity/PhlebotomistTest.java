@@ -29,11 +29,11 @@ public class PhlebotomistTest {
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     @JoinColumn(name = "appointment_id")
     private Appointment appointment;
 
-    @OneToMany(mappedBy = "phlebotomistTest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "phlebotomistTest", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<LabTestReport> labTestReportList;
 
     public void addLabTestReport(LabTestReport labTestReport) {

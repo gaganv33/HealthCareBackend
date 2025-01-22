@@ -49,7 +49,7 @@ public class Receptionist {
             CascadeType.MERGE,
             CascadeType.REFRESH,
             CascadeType.PERSIST
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     private List<Prescription> prescriptionList;
 
     public void addPrescription(Prescription prescription) {

@@ -48,7 +48,7 @@ public class Phlebotomist {
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     private List<LabTestReport> labTestReportList;
 
     public void addLabTestReport(LabTestReport labTestReport) {

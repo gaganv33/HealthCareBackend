@@ -34,7 +34,7 @@ public class LabTestReport {
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     @JoinColumn(name = "phlebotomist_id")
     private Phlebotomist phlebotomist;
 
@@ -43,7 +43,7 @@ public class LabTestReport {
             CascadeType.MERGE,
             CascadeType.PERSIST,
             CascadeType.REFRESH
-    }, fetch = FetchType.LAZY)
+    }, fetch = FetchType.EAGER)
     @JoinColumn(name = "phlebotomist_test_id")
     private PhlebotomistTest phlebotomistTest;
 

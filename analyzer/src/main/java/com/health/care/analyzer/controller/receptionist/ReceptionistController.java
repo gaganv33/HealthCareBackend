@@ -88,7 +88,7 @@ public class ReceptionistController {
         return new ResponseEntity<>(prescriptionResponseDTOS, HttpStatus.OK);
     }
 
-    @GetMapping("/prescription/medicine/list/{id}")
+    @PostMapping("/prescription/medicine/list/{id}")
     public ResponseEntity<OnSavePrescriptionMedicineListDTO> onSavePrescriptionUsingIdAndPhlebotomist(
             @PathVariable(name = "id") Long id, HttpServletRequest httpServletRequest)
             throws PrescriptionNotFoundException {
