@@ -83,7 +83,7 @@ public class PrescriptionServiceImpl implements PrescriptionService {
                 Medicine medicineAvailable = medicine.get();
                 availableMedicineList.add(AvailableMedicineRecord.builder()
                                 .name(medicineAvailable.getName())
-                                .quantity(medicineAvailable.getQuantity())
+                                .quantity(medicineRecord.getQuantity())
                                 .serialNo(medicineAvailable.getSerialNo())
                                 .expiryDate(medicineAvailable.getExpiryDate())
                                 .build());
@@ -92,7 +92,8 @@ public class PrescriptionServiceImpl implements PrescriptionService {
         if(!pendingMedicineList.isEmpty()) {
             onSavePrescriptionMedicineListDTO.setMessage("Some medicine are pending.");
         } else {
-            onSavePrescriptionMedicineListDTO.setMessage("Prescription completed. All medicine are available.");
+            issueMedicineToPatient(availableMedicineList);
+            onSavePrescriptionMedicineListDTO.setMessage("Prescription completed. All medicine are available. And delivered to the patient.");
             prescription.getAppointment().setStage(Stage.COMPLETED);
         }
         prescription.setPendingMedicineList(pendingMedicineList);
@@ -104,5 +105,21 @@ public class PrescriptionServiceImpl implements PrescriptionService {
     @Override
     public List<Prescription> getPrescriptionUsingReceptionist(Receptionist receptionist) {
         return prescriptionDAO.getPrescriptionUsingReceptionist(receptionist);
+    }
+
+    private void issueMedicineToPatient(List<AvailableMedicineRecord> availableMedicineList) {
+        for(AvailableMedicineRecord availableMedicineRecord : availableMedicineList) {
+            Optional<Medicine> medicineOptional = medicineService.findMedicineBySerialNo(availableMedicineRecord.getSerialNo());
+            if(medicineOptional.isPresent()) {
+                Medicine medicine = medicineOptional.get();
+                int difference = medicine.getQuantity() - availableMedicineRecord.getQuantity();
+                if(difference == 0) {
+                    medicineService.deleteBySerialNo(medicine.getSerialNo());
+                } else {
+                    medicine.setQuantity(difference);
+                    medicineService.merge(medicine);
+                }
+            }
+        }
     }
 }

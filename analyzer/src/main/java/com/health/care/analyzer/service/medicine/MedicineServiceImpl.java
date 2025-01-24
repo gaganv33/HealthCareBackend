@@ -45,4 +45,15 @@ public class MedicineServiceImpl implements MedicineService {
     public Optional<Medicine> getMedicineUsingMedicineNameAndQuantity(String name, Integer quantity) {
         return medicineDAO.getMedicineUsingMedicineNameAndQuantity(name, quantity);
     }
+
+    @Override
+    public Optional<Medicine> findMedicineBySerialNo(String serialNo) {
+        return medicineDAO.findMedicineBySerialNo(serialNo);
+    }
+
+    @Override
+    @Transactional
+    public void deleteBySerialNo(String serialNo) {
+        medicineDAO.deleteBySerialNo(serialNo);
+    }
 }

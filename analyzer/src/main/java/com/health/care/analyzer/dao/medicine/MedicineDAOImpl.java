@@ -71,4 +71,25 @@ public class MedicineDAOImpl implements MedicineDAO {
         medicineList.sort(Comparator.comparing(Medicine::getExpiryDate));
         return Optional.of(medicineList.get(0));
     }
+
+    @Override
+    public Optional<Medicine> findMedicineBySerialNo(String serialNo) {
+        TypedQuery<Medicine> query = entityManager.createQuery(
+                "from Medicine m where m.serialNo = :serialNo",
+                Medicine.class
+        );
+        query.setParameter("serialNo", serialNo);
+        List<Medicine> medicineList = query.getResultList();
+        if(medicineList.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(medicineList.get(0));
+    }
+
+    @Override
+    public void deleteBySerialNo(String serialNo) {
+        entityManager.createQuery(
+                "delete from Medicine m where m.serialNo = :serialNo"
+        ).setParameter("serialNo", serialNo).executeUpdate();
+    }
 }
